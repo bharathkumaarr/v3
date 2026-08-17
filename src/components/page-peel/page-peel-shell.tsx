@@ -5,94 +5,155 @@ import {
   useEffect,
   useRef,
   useState,
+  useSyncExternalStore,
+  type CSSProperties,
   type PointerEvent as ReactPointerEvent,
   type ReactNode,
 } from "react";
+import { animate, motion, useMotionValue, useReducedMotion, useTransform } from "motion/react";
 import { useTheme } from "next-themes";
 import { getPaperAudio } from "@/lib/paper-sounds";
+import {
+  PEEL_MAX,
+  PEEL_SNAP,
+  buildFoldGeometry,
+  peelFromPointerDelta,
+  peelProgress,
+  visualPeelAmount,
+} from "@/lib/peel-math";
 import { cn } from "@/lib/cn";
+import { PaperFold } from "./paper-fold";
 
-const MIN_PEEL = 36;
-const MAX_PEEL = 220;
-const SNAP_DARK = 0.52;
-const DRAG_THRESHOLD = 6;
+const DRAG_THRESHOLD = 5;
+const SPRING = { type: "spring" as const, stiffness: 360, damping: 32, mass: 0.85 };
+const subscribeMounted = (onStoreChange: () => void) => {
+  queueMicrotask(onStoreChange);
+  return () => {};
+};
+const getMountedSnapshot = () => true;
+const getServerMountedSnapshot = () => false;
 
 type PagePeelShellProps = {
   children: ReactNode;
 };
 
-function peelClipPath(offset: number) {
-  const x = Math.max(MIN_PEEL, offset);
-  const y = Math.max(MIN_PEEL * 0.72, offset * 0.72);
-  return `polygon(0 0, calc(100% - ${x}px) 0, 100% ${y}px, 100% 100%, 0 100%)`;
+function useViewport() {
+  const [size, setSize] = useState({ w: 1200, h: 800 });
+
+  useEffect(() => {
+    const update = () => setSize({ w: window.innerWidth, h: window.innerHeight });
+    update();
+    window.addEventListener("resize", update, { passive: true });
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  return size;
 }
 
 export function PagePeelShell({ children }: PagePeelShellProps) {
   const { setTheme, resolvedTheme } = useTheme();
-  const [peel, setPeel] = useState(MIN_PEEL);
-  const peelRef = useRef(MIN_PEEL);
-  const [mounted, setMounted] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
+  const viewport = useViewport();
+  const mounted = useSyncExternalStore(
+    subscribeMounted,
+    getMountedSnapshot,
+    getServerMountedSnapshot,
+  );
+
+  const peel = useMotionValue(0);
+  const clipPath = useTransform(peel, (value) => {
+    const geo = buildFoldGeometry(value, viewport.w, viewport.h);
+    return `path('${geo.pagePath}')`;
+  });
+
+  const [isDragging, setIsDragging] = useState(false);
+  const [displayPeel, setDisplayPeel] = useState(0);
+
   const dragging = useRef(false);
   const moved = useRef(false);
-  const start = useRef({ x: 0, y: 0, peel: MIN_PEEL });
+  const start = useRef({ x: 0, y: 0, peel: 0 });
   const lastCrinkle = useRef(0);
   const audio = useRef<ReturnType<typeof getPaperAudio> | null>(null);
   const underRef = useRef<HTMLDivElement>(null);
-  const syncing = useRef(false);
 
   useEffect(() => {
-    setMounted(true);
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (prefersReducedMotion) return;
 
     audio.current = getPaperAudio();
     audio.current.startAmbient();
     return () => audio.current?.stopAmbient();
-  }, []);
+  }, [prefersReducedMotion]);
 
   useEffect(() => {
     if (!mounted) return;
-    const next = resolvedTheme === "dark" ? MAX_PEEL : MIN_PEEL;
-    setPeel(next);
-    peelRef.current = next;
-  }, [mounted, resolvedTheme]);
+    const target = resolvedTheme === "dark" ? PEEL_MAX : 0;
+    peel.set(target);
+  }, [mounted, resolvedTheme, peel]);
 
   useEffect(() => {
     const syncScroll = () => {
-      if (!underRef.current || syncing.current) return;
-      syncing.current = true;
-      underRef.current.scrollTop = window.scrollY;
-      syncing.current = false;
+      if (underRef.current) underRef.current.scrollTop = window.scrollY;
     };
-
     window.addEventListener("scroll", syncScroll, { passive: true });
     syncScroll();
     return () => window.removeEventListener("scroll", syncScroll);
   }, [mounted]);
 
-  const playCrinkleThrottled = useCallback((intensity: number) => {
+  useEffect(() => peel.on("change", (value) => setDisplayPeel(value)), [peel]);
+
+  const playCrinkle = useCallback((intensity: number) => {
     const now = Date.now();
-    if (now - lastCrinkle.current < 70) return;
+    if (now - lastCrinkle.current < 65) return;
     lastCrinkle.current = now;
     audio.current?.playCrinkle(intensity);
   }, []);
 
-  const applyTheme = useCallback(
+  const snapTo = useCallback(
     (dark: boolean) => {
+      const target = dark ? PEEL_MAX : 0;
       setTheme(dark ? "dark" : "light");
-      const next = dark ? MAX_PEEL : MIN_PEEL;
-      setPeel(next);
-      peelRef.current = next;
-      audio.current?.playRustle(dark ? 0.05 : 0.03);
+      audio.current?.playRustle(dark ? 0.045 : 0.03);
+
+      if (prefersReducedMotion) {
+        peel.set(target);
+        return;
+      }
+
+      void animate(peel, target, SPRING);
     },
-    [setTheme],
+    [peel, prefersReducedMotion, setTheme],
   );
+
+  const finishDrag = useCallback(
+    (value: number) => snapTo(peelProgress(value) >= PEEL_SNAP),
+    [snapTo],
+  );
+
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const finish = () => {
+      if (!dragging.current) return;
+      dragging.current = false;
+      setIsDragging(false);
+      finishDrag(peel.get());
+    };
+
+    window.addEventListener("pointerup", finish);
+    window.addEventListener("blur", finish);
+    return () => {
+      window.removeEventListener("pointerup", finish);
+      window.removeEventListener("blur", finish);
+    };
+  }, [finishDrag, isDragging, peel]);
 
   const onPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
     dragging.current = true;
     moved.current = false;
-    start.current = { x: event.clientX, y: event.clientY, peel };
+    setIsDragging(true);
+    start.current = { x: event.clientX, y: event.clientY, peel: peel.get() };
     event.currentTarget.setPointerCapture(event.pointerId);
-    audio.current?.playRustle(0.035);
+    audio.current?.playRustle(0.03);
   };
 
   const onPointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
@@ -102,109 +163,83 @@ export function PagePeelShell({ children }: PagePeelShellProps) {
     const dy = event.clientY - start.current.y;
     if (Math.abs(dx) + Math.abs(dy) > DRAG_THRESHOLD) moved.current = true;
 
-    const delta = Math.max(0, dx + dy * 0.65);
-    const next = Math.min(MAX_PEEL, Math.max(MIN_PEEL, start.current.peel + delta));
-
-    setPeel(next);
-    peelRef.current = next;
-    playCrinkleThrottled(Math.min(1, delta / 120));
-  };
-
-  const finishPeel = (value: number) => {
-    const progress = (value - MIN_PEEL) / (MAX_PEEL - MIN_PEEL);
-    applyTheme(progress >= SNAP_DARK);
+    peel.set(peelFromPointerDelta(dx, dy, start.current.peel));
+    playCrinkle(Math.min(1, (Math.abs(dx) + Math.abs(dy)) / 130));
   };
 
   const onPointerUp = () => {
     if (!dragging.current) return;
     dragging.current = false;
-    finishPeel(peelRef.current);
+    setIsDragging(false);
+    finishDrag(peel.get());
   };
 
   const onClick = () => {
     if (moved.current) return;
-    applyTheme(resolvedTheme !== "dark");
+    snapTo(resolvedTheme !== "dark");
   };
 
   if (!mounted) {
     return <div className="relative min-h-screen">{children}</div>;
   }
 
-  const progress = (peel - MIN_PEEL) / (MAX_PEEL - MIN_PEEL);
-  const foldSize = 56 + progress * 36;
+  const hitSize = visualPeelAmount(displayPeel) + 56;
+  const peelProgressValue = peelProgress(displayPeel);
 
   return (
-    <div className="relative min-h-screen">
+    <div
+      className={cn(
+        "relative min-h-screen overflow-x-clip bg-neutral-1 transition-colors duration-300",
+        isDragging && "cursor-grabbing",
+      )}
+      style={{ "--peel-progress": peelProgressValue } as CSSProperties}
+    >
       <div
         ref={underRef}
         className="dark pointer-events-none fixed inset-0 z-[1] overflow-hidden bg-neutral-1 text-neutral-8"
-        aria-hidden="true"
+        aria-hidden
       >
         <div className="min-h-screen">{children}</div>
       </div>
 
-      <div
-        className={cn(
-          "light relative z-[2] min-h-screen bg-neutral-1 text-neutral-8",
-          "transition-[clip-path] duration-150 ease-out",
-        )}
-        style={{ clipPath: peelClipPath(peel) }}
+      <motion.div
+        className="light relative z-[2] min-h-screen bg-neutral-1 text-neutral-8 shadow-[0_0_60px_rgba(19,27,32,0.035)]"
+        style={{ clipPath }}
       >
         {children}
+      </motion.div>
+
+      <div className="pointer-events-none fixed top-0 right-0 z-[40]">
+        <PaperFold
+          peel={visualPeelAmount(displayPeel)}
+          viewportW={viewport.w}
+          viewportH={viewport.h}
+          clipPeel={displayPeel}
+          isDragging={isDragging}
+          reducedMotion={!!prefersReducedMotion}
+        />
       </div>
 
       <div
-        className="fixed top-0 right-0 z-[60] cursor-grab touch-none select-none active:cursor-grabbing"
-        style={{ width: foldSize * 2.2, height: foldSize * 2.2 }}
+        className={cn(
+          "fixed top-0 right-0 z-[50] cursor-grab touch-none select-none active:cursor-grabbing",
+        )}
+        style={{ width: hitSize + 40, height: hitSize + 40 }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
         onClick={onClick}
         role="button"
-        aria-label="Peel the page corner to reveal dark mode"
+        aria-label="Peel the corner to switch theme"
         tabIndex={0}
         onKeyDown={(event) => {
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
-            applyTheme(resolvedTheme !== "dark");
+            snapTo(resolvedTheme !== "dark");
           }
         }}
-      >
-        <div
-          className="pointer-events-none absolute top-0 right-0 origin-top-right"
-          style={{
-            width: foldSize * 1.65,
-            height: foldSize * 1.65,
-            perspective: "900px",
-          }}
-        >
-          <div
-            className={cn(
-              "absolute top-0 right-0 border-b border-l border-neutral-3",
-              "shadow-[(-8px)_10px_24px_rgba(19,27,32,0.16)]",
-            )}
-            style={{
-              width: foldSize * 1.45,
-              height: foldSize * 1.45,
-              clipPath: "polygon(100% 0, 0 0, 100% 100%)",
-              background:
-                "linear-gradient(145deg, #ffffff 0%, #f4f6f8 38%, #e2e6ea 66%, #c8ced4 100%)",
-              transform: `rotateX(${16 + progress * 20}deg) rotateY(${-20 - progress * 26}deg) rotateZ(${-2 - progress * 4}deg) translateZ(${10 + progress * 20}px)`,
-              transformStyle: "preserve-3d",
-            }}
-          />
-          <div
-            className="absolute top-0 right-0 bg-neutral-8/12"
-            style={{
-              width: foldSize * 0.5,
-              height: foldSize * 0.5,
-              clipPath: "polygon(100% 0, 100% 100%, 0 0)",
-              filter: "blur(0.5px)",
-            }}
-          />
-        </div>
-      </div>
+      />
     </div>
   );
 }
