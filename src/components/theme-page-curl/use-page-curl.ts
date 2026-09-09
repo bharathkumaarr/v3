@@ -52,6 +52,9 @@ const SETTLE_TIMEOUT_MS = 700;
 const REVEAL_SWAP_HOLD_MS = 90;
 /** Aim past bare coverage so the committed turn finishes briskly. */
 const COMMIT_OVERSHOOT = 1.18;
+/** A press that stays within this many pixels counts as a tap, not a drag. */
+const TAP_TRAVEL_PX = 6;
+const TAP_MS = 380;
 
 export function usePageCurl({
   grabRef,
@@ -81,6 +84,7 @@ export function usePageCurl({
   const pointerId = useRef<number | null>(null);
   const velocity = useRef(new VelocityTracker());
 
+  const pressStart = useRef({ x: 0, y: 0, time: 0 });
   const commitTarget = useRef(0);
   const settleStartedAt = useRef(0);
   const holdUntil = useRef(0);
@@ -123,8 +127,11 @@ export function usePageCurl({
 
   useEffect(() => {
     const measure = () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
+      // `clientWidth` excludes a classic scrollbar, which is the box that fixed
+      // positioning and pointer coordinates both use. `innerWidth` would include it and
+      // push the corner off by the scrollbar's width.
+      const width = document.documentElement.clientWidth;
+      const height = document.documentElement.clientHeight;
       const next = makeViewport(width, height);
 
       viewportRef.current = next;
@@ -315,6 +322,10 @@ export function usePageCurl({
       pointer.current.y = event.clientY;
       pointer.current.seen = true;
 
+      pressStart.current.x = event.clientX;
+      pressStart.current.y = event.clientY;
+      pressStart.current.time = event.timeStamp;
+
       velocity.current.reset();
       element.setPointerCapture(event.pointerId);
       setPhase("drag");
@@ -344,7 +355,18 @@ export function usePageCurl({
       const dirY = Math.sin(foldAngle);
       const fold = solveFold(Math.max(0, distance.current.value), dirX, dirY, view);
 
-      const outcome = decideRelease(fold.progress, velocity.current.velocity());
+      // A tap is a legitimate way to ask for the page to turn, so treat a press that
+      // barely moved as a commit rather than letting it spring back to nothing.
+      const travel = Math.hypot(
+        event.clientX - pressStart.current.x,
+        event.clientY - pressStart.current.y,
+      );
+      const tap =
+        travel <= TAP_TRAVEL_PX && event.timeStamp - pressStart.current.time <= TAP_MS;
+
+      const outcome = tap
+        ? "commit"
+        : decideRelease(fold.progress, velocity.current.velocity());
       velocity.current.reset();
 
       if (outcome === "commit") {
