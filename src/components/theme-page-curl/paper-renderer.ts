@@ -237,9 +237,6 @@ export class PaperRenderer {
         uMinContact: { value: shadow.minContact },
         uContactFade: { value: shadow.contactFade },
         uProgress: { value: 0 },
-        uReverseBlend: { value: 0 },
-        uReverseShade: { value: pageCurlConfig.paper.reverseShade },
-        uFrontColor: { value: new Vector3(...LIGHT_FALLBACK) },
         uBackColor: { value: new Vector3(...DARK_FALLBACK) },
         uShadowColor: { value: new Vector3(0.04, 0.06, 0.08) },
       },
@@ -305,9 +302,7 @@ export class PaperRenderer {
 
     (uniforms.uFrontColor.value as Vector3).set(...frontRgb);
     (uniforms.uBackColor.value as Vector3).set(...backRgb);
-    (shadow.uFrontColor.value as Vector3).set(...frontRgb);
     (shadow.uBackColor.value as Vector3).set(...backRgb);
-    shadow.uReverseShade.value = pageCurlConfig.paper.reverseShade;
   }
 
   draw(frame: PaperFrame): void {
@@ -331,7 +326,6 @@ export class PaperRenderer {
     shadow.uCrease.value = frame.creaseDistance;
     shadow.uRadius.value = frame.radius;
     shadow.uProgress.value = frame.progress;
-    shadow.uReverseBlend.value = paper.uReverseBlend.value;
 
     this.renderer.render(this.scene, this.camera);
   }

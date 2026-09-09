@@ -7,7 +7,7 @@ export const siteConfig = {
     headline: "Bharath Kumar",
     role: "software engineer*",
     taglineLine2: "at the intersection of",
-    taglineLine3: "design & web development.",
+    taglineLine3: "design & development.",
     footnote:
       "building across the stack — backend, infrastructure, and frontend.",
     tags: ["backend", "frontend", "infra"],
@@ -15,6 +15,10 @@ export const siteConfig = {
   contact: [
     { label: "GitHub", href: "https://github.com/bharathkumaarr" },
     { label: "LinkedIn", href: "https://linkedin.com/in/bkrm" },
+    {
+      label: "cal.com",
+      href: "https://cal.com/bharath-kumar-reddy/quick-chat",
+    },
   ],
 };
 

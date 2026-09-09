@@ -33,7 +33,10 @@ export const ThemeRevealLayer = memo(function ThemeRevealLayer({
   return (
     <div
       ref={layerRef}
-      className={cn(theme, "pointer-events-none fixed inset-0 z-10 overflow-hidden")}
+      className={cn(
+        theme,
+        "pointer-events-none fixed inset-0 z-10 overflow-hidden [&_*]:transition-none",
+      )}
       style={{
         clipPath: "polygon(0px 0px, 0px 0px, 0px 0px)",
         background: "var(--neutral-1)",

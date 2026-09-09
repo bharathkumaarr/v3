@@ -217,10 +217,20 @@ export function usePageCurl({
       const timedOut = now - settleStartedAt.current > SETTLE_TIMEOUT_MS;
       if (isThemeApplied() || timedOut) {
         // Collapse instantly while the revealed theme still fills the screen, so the
-        // handoff to the real DOM lands on identical pixels.
+        // handoff to the real DOM lands on identical pixels. Clear the clip path in this
+        // same tick before re-pointing the reveal — otherwise React paints the new (wrong)
+        // opposite theme while the layer still covers the viewport and links color-tween.
         settleSpring(distance.current, 0);
         settleSpring(angle.current, angleTarget.current);
+        distanceTarget.current = 0;
         holdUntil.current = now + REVEAL_SWAP_HOLD_MS;
+
+        const parkedAngle = clamp(angleTarget.current, Math.PI / 2, Math.PI);
+        onFrame(
+          solveFold(0, Math.cos(parkedAngle), Math.sin(parkedAngle), view),
+          view,
+        );
+
         onSyncReveal();
         setPhase("idle");
       }
