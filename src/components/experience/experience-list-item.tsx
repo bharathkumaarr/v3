@@ -12,14 +12,14 @@ function formatDateRange(item: ExperienceItem) {
   if (item.present) {
     return (
       <>
-        (<time dateTime={item.startYear}>{item.startYear}</time>—present)
+        (<time dateTime={item.startYear}>{item.startYear}</time>-present)
       </>
     );
   }
 
   return (
     <>
-      (<time dateTime={item.startYear}>{item.startYear}</time>—
+      (<time dateTime={item.startYear}>{item.startYear}</time>-
       <time dateTime={item.endYear}>{item.endYear}</time>)
     </>
   );

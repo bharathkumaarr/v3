@@ -2,14 +2,14 @@ export const siteConfig = {
   name: "Bharath Kumar",
   title: "bharath / bharath kumar",
   description:
-    "software engineer at the intersection of design and web development",
+    "software engineer hanging out at the intersection of design and development",
   hero: {
     headline: "Bharath Kumar",
     role: "software engineer*",
     taglineLine2: "at the intersection of",
     taglineLine3: "design & development.",
     footnote:
-      "building across the stack — backend, infrastructure, and frontend.",
+      "happily bouncing around the stack: backend, infra, and frontend.",
     tags: ["backend", "frontend", "infra"],
   },
   contact: [
@@ -50,7 +50,7 @@ export const experience: ExperienceItem[] = [
     industry: "insurtech",
     location: "india",
     description:
-      "building the core saas b2b2c platform end to end — apis, web app, and the pieces in between.",
+      "fullstack on the core saas b2b2c platform. apis, web app, and whatever sits between them.",
     icon: "/icons/oneassure.svg",
   },
   {
@@ -61,7 +61,7 @@ export const experience: ExperienceItem[] = [
     industry: "web3 infrastructure",
     location: "india",
     description:
-      "software engineer on the founding team, building at the infrastructure level.",
+      "on the founding team, digging into the infrastructure layer.",
     icon: "/icons/vipernetwork.svg",
   },
   {
@@ -72,7 +72,7 @@ export const experience: ExperienceItem[] = [
     industry: "web3",
     location: "india",
     description:
-      "started as a member, now a contributor to community initiatives and ecosystem projects.",
+      "started as a member, now poking around community initiatives and ecosystem projects.",
     icon: "/icons/superteam.svg",
   },
 ];
@@ -81,20 +81,20 @@ export const projects: ProjectItem[] = [
   {
     title: "Inploi SDK",
     description:
-      "the official software development kit for inploi. consists of 8 packages (and counting) with a core and many lightweight ways to implement features of the inploi platform on any website, such as chatbot, job search and job alerts.",
+      "the official sdk for inploi. 8 packages and counting, with a core plus light ways to drop chatbot, job search, job alerts, and friends onto any site.",
     href: "https://www.npmjs.com/package/@inploi/sdk",
     icon: "/icons/project-1.svg",
   },
   {
     title: "Inploi Dashboard",
     description:
-      "customer-facing dashboard built on remix as a bff interplaying with the laravel api that powers the inploi platform.",
+      "customer-facing dashboard on remix, playing bff with the laravel api behind inploi.",
     icon: "/icons/project-2.svg",
   },
   {
     title: "Winden UI",
     description:
-      "internal design system library with about 50 components. built for react, styled with vanilla extract.",
+      "internal design system with about 50 components. react, styled with vanilla extract.",
     href: "https://vite-and-design-system-ui-docs.vercel.app/",
     icon: "/icons/project-3.svg",
   },
