@@ -202,9 +202,7 @@ export class PaperRenderer {
         uSag: { value: 0 },
         uFrontColor: { value: new Vector3(...LIGHT_FALLBACK) },
         uBackColor: { value: new Vector3(...DARK_FALLBACK) },
-        uReverseTint: {
-          value: new Vector3(...parseCssColor(paper.reverseTint, LIGHT_FALLBACK)),
-        },
+        uReverseShade: { value: paper.reverseShade },
         uReverseBlend: { value: 0 },
         uLightDir: { value: new Vector3(...paper.lightDirection) },
         uAmbient: { value: paper.ambient },
@@ -213,6 +211,7 @@ export class PaperRenderer {
         uFeather: { value: mesh.feather },
         uOcclusion: { value: paper.creaseOcclusion },
         uEdgeShade: { value: paper.edgeShade },
+        uEdgeSpread: { value: paper.edgeSpread },
       },
     });
 
@@ -258,7 +257,15 @@ export class PaperRenderer {
     // Places the z=0 plane at exactly 1:1 with CSS pixels, so the flat sheet lines up
     // with the DOM and only lifted geometry picks up perspective.
     const fovRadians = (pageCurlConfig.fov * Math.PI) / 180;
-    this.camera.position.z = this.height / 2 / Math.tan(fovRadians / 2);
+    const distance = this.height / 2 / Math.tan(fovRadians / 2);
+    this.camera.position.z = distance;
+
+    // Everything sits in a shallow slab around the page plane. Clipping tightly to it
+    // matters: where the flap folds back it runs almost tangent to itself, and a wide
+    // near/far ratio leaves too little depth precision to resolve which side is on top,
+    // which shows up as a sawtooth along the silhouette.
+    this.camera.near = distance * 0.15;
+    this.camera.far = distance + Math.hypot(this.width, this.height);
     this.camera.updateProjectionMatrix();
 
     const paper = this.paperMaterial.uniforms;

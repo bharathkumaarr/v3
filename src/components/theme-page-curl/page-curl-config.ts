@@ -18,24 +18,31 @@ export const pageCurlConfig = {
 
   /** Resting affordance. `idle` shows with no pointer nearby, `hover` when the pointer is on the corner. */
   affordance: {
-    idleCurl: 15,
-    hoverCurl: 34,
+    idleCurl: 21,
+    hoverCurl: 52,
   },
 
   /**
    * Shape of the fold.
    *
-   * `theta` is the total angle the paper wraps through. Low values give a wide, gentle
-   * curl (the resting dog-ear); high values tighten the bend into something closer to a
-   * crease, which is what a real page looks like once it is being turned over.
+   * `theta` is the total angle the paper wraps through, and it also fixes how much of
+   * the sheet a given drag lifts, since `crease = radius * theta` and
+   * `radius = distance / (theta - sin theta)`. At exactly pi the crease lands on the
+   * pointer; below pi the fold runs ahead of the pointer, above pi it lags behind. The
+   * range therefore sits just under to just over pi: a small drag reads as a soft
+   * dog-ear, a long one tightens toward a real crease.
    */
   curl: {
-    thetaMin: 1.92,
+    thetaMin: 1.95,
     thetaMax: 3.32,
     /** Hard stop so the sheet can never spiral into itself. */
     maxAngle: Math.PI * 1.06,
-    /** How much looser the curl gets away from the grabbed corner (0 = pure cylinder). */
-    cone: 0.55,
+    /**
+     * How much looser the curl gets away from the grabbed corner (0 = pure cylinder).
+     * Kept modest: a strong cone pushes the point where the sheet turns edge-on far
+     * enough off the fold axis that the tip stops reading as one continuous surface.
+     */
+    cone: 0.3,
     /** Span over which the cone term ramps in, as a fraction of the viewport diagonal. */
     coneSpan: 0.55,
     /** Downward droop of the lifted tip, in pixels at full turn. */
@@ -73,19 +80,32 @@ export const pageCurlConfig = {
   },
 
   paper: {
-    /** Ambient term; the rest of the lighting comes from the key light. */
-    ambient: 0.74,
+    /**
+     * Ambient term; the rest comes from the key light. Kept high because paper this
+     * pale has very little falloff before it starts reading as grey plastic.
+     */
+    ambient: 0.82,
     /** Direction the key light comes from, in view space. */
-    lightDirection: [-0.42, 0.72, 0.55] as const,
+    lightDirection: [-0.38, 0.66, 0.65] as const,
     /** Matte paper, so this stays very low. */
-    specular: 0.06,
-    specularPower: 42,
-    /** Tint of the reverse side before the opposite theme takes over. */
-    reverseTint: "#e6eaee",
+    specular: 0.035,
+    specularPower: 46,
+    /**
+     * The reverse of a barely-turned corner is still this sheet's own stock, just a
+     * shade off the printed side. Derived from the live theme rather than a fixed grey
+     * so a dark sheet does not flash a pale underside.
+     */
+    reverseShade: 0.92,
     /** Extra darkening in the tightest part of the bend. */
-    creaseOcclusion: 0.16,
-    /** Visual thickness of the sheet, communicated through edge shading. */
-    edgeShade: 0.22,
+    creaseOcclusion: 0.12,
+    /**
+     * Visual thickness of the sheet, communicated through edge shading rather than a
+     * literal extrusion. This also softens the hand-off where the surface turns
+     * edge-on and the printed side gives way to the reverse.
+     */
+    edgeShade: 0.28,
+    /** How wide, in normal-to-view terms, the edge shading ramps over. */
+    edgeSpread: 0.55,
   },
 
   mesh: {
