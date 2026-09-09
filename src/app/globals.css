@@ -41,6 +41,12 @@
 
 html {
   scroll-behavior: smooth;
+  /* Keep scrolling, hide the gutter so the page curl sits flush with the window edge. */
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
 }
 
 body {
