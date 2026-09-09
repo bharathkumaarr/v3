@@ -89,8 +89,14 @@ export const pageCurlConfig = {
   },
 
   mesh: {
-    segments: 148,
-    reducedSegments: 96,
+    segments: 192,
+    lowPowerSegments: 128,
+    /**
+     * Grid density is biased toward the grabbed corner with this exponent. A uniform
+     * grid wastes vertices on the flat side of the sheet and leaves the curl faceted,
+     * since the curl is small in screen terms but sweeps through ~180 degrees.
+     */
+    cornerBias: 2.2,
     /** Antialiasing feather at the crease, in pixels. */
     feather: 1.4,
   },
