@@ -49,6 +49,16 @@ export type FoldSolution = {
 
 const EPSILON = 0.01;
 
+/**
+ * The reveal starts this far behind the crease rather than exactly on it.
+ *
+ * The paper's alpha feathers in across a pixel or two for antialiasing, and the revealed
+ * page is dark, so a reveal that began exactly at the crease would show through that
+ * feather as a hairline along the fold. The offset region is well inside the flap's own
+ * silhouette, so nothing is lost by hiding it.
+ */
+const REVEAL_INSET = 3;
+
 export function clamp(value: number, min: number, max: number): number {
   return value < min ? min : value > max ? max : value;
 }
@@ -96,9 +106,11 @@ export function solveFold(
   }
 
   const { thetaMin, thetaMax } = pageCurlConfig.curl;
+  const span = sheetSpan(dirX, dirY, viewport) || viewport.diagonal || 1;
+
   // Pre-estimate of progress. `creaseDistance` tracks `distance` closely, so using the
   // raw drag length here avoids a circular dependency without a visible difference.
-  const ramp = smoothstep(0, 1, distance / (viewport.diagonal || 1));
+  const ramp = smoothstep(0, 1, distance / span);
   const theta = thetaMin + (thetaMax - thetaMin) * ramp;
 
   const radius = distance / (theta - Math.sin(theta));
@@ -110,7 +122,9 @@ export function solveFold(
     radius,
     theta,
     creaseDistance,
-    progress: clamp01(creaseDistance / (viewport.diagonal || 1)),
+    // Measured against the span rather than the diagonal, so the threshold means the
+    // same thing whether the corner is pulled straight down or across the diagonal.
+    progress: clamp01(creaseDistance / span),
     flat: false,
   };
 }
@@ -121,13 +135,24 @@ function axisDistance(point: Vec2, corner: Vec2, dirX: number, dirY: number): nu
 }
 
 /**
+ * How far the crease has to travel for the fold to have swept the whole viewport.
+ *
+ * The grabbed corner sits at axis distance zero and the fold direction is confined to
+ * the down-left quadrant, so the far corner is always the last point reached.
+ */
+export function sheetSpan(dirX: number, dirY: number, viewport: Viewport): number {
+  return viewport.width * Math.max(-dirX, 0) + viewport.height * Math.max(dirY, 0);
+}
+
+/**
  * The part of the viewport the sheet no longer covers, as a `clip-path` polygon.
  *
  * This is the viewport rectangle clipped to the half-plane past the crease line
  * (Sutherland–Hodgman against a single edge).
  */
 export function revealPolygon(fold: FoldSolution, viewport: Viewport): string {
-  if (fold.flat || fold.creaseDistance <= 0) return "polygon(0px 0px, 0px 0px, 0px 0px)";
+  const reach = fold.creaseDistance - REVEAL_INSET;
+  if (fold.flat || reach <= 0) return "polygon(0px 0px, 0px 0px, 0px 0px)";
 
   const corner = cornerOf(viewport);
   const rect: Vec2[] = [
@@ -137,8 +162,9 @@ export function revealPolygon(fold: FoldSolution, viewport: Viewport): string {
     { x: 0, y: viewport.height },
   ];
 
-  const inside = (p: Vec2) =>
-    axisDistance(p, corner, fold.dirX, fold.dirY) - fold.creaseDistance;
+  // The turned side of the crease is the one holding the grabbed corner, which sits at
+  // axis distance zero, so points inside the reveal are *below* the crease distance.
+  const inside = (p: Vec2) => reach - axisDistance(p, corner, fold.dirX, fold.dirY);
 
   const output: Vec2[] = [];
 
@@ -171,17 +197,8 @@ export function revealPolygon(fold: FoldSolution, viewport: Viewport): string {
 /** True once the crease has swept past every viewport corner. */
 export function coversViewport(fold: FoldSolution, viewport: Viewport): boolean {
   if (fold.flat) return false;
-
-  const corner = cornerOf(viewport);
-  const corners: Vec2[] = [
-    { x: 0, y: 0 },
-    { x: viewport.width, y: 0 },
-    { x: viewport.width, y: viewport.height },
-    { x: 0, y: viewport.height },
-  ];
-
-  return corners.every(
-    (p) => axisDistance(p, corner, fold.dirX, fold.dirY) >= fold.creaseDistance,
+  return (
+    fold.creaseDistance - REVEAL_INSET >= sheetSpan(fold.dirX, fold.dirY, viewport)
   );
 }
 
@@ -196,19 +213,8 @@ export function distanceToCoverViewport(
   dirY: number,
   viewport: Viewport,
 ): number {
-  const corner = cornerOf(viewport);
-  const corners: Vec2[] = [
-    { x: 0, y: 0 },
-    { x: viewport.width, y: 0 },
-    { x: viewport.width, y: viewport.height },
-    { x: 0, y: viewport.height },
-  ];
-
-  const needed = Math.max(
-    ...corners.map((p) => axisDistance(p, corner, dirX, dirY)),
-  );
-
-  if (needed <= 0) return 0;
+  const needed = sheetSpan(dirX, dirY, viewport);
+  if (needed <= 0) return viewport.diagonal;
 
   let distance = needed;
   for (let i = 0; i < 5; i++) {

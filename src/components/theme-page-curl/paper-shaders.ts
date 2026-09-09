@@ -73,7 +73,7 @@ export const paperVertexShader = /* glsl */ `
 export const paperFragmentShader = /* glsl */ `
   uniform vec3 uFrontColor;     // page background of the active theme
   uniform vec3 uBackColor;      // page background of the theme underneath
-  uniform vec3 uReverseTint;    // paper stock seen on a barely-turned corner
+  uniform float uReverseShade;  // this sheet's own stock, seen from behind
   uniform float uReverseBlend;  // 0 = paper stock, 1 = fully the other theme
   uniform vec3 uLightDir;
   uniform float uAmbient;
@@ -82,6 +82,7 @@ export const paperFragmentShader = /* glsl */ `
   uniform float uFeather;
   uniform float uOcclusion;
   uniform float uEdgeShade;
+  uniform float uEdgeSpread;
 
   varying float vArc;
   varying float vAngle;
@@ -100,12 +101,18 @@ export const paperFragmentShader = /* glsl */ `
     vec3 light = normalize(uLightDir);
     vec3 halfVector = normalize(light + view);
 
-    float shade = uAmbient + (1.0 - uAmbient) * max(dot(normal, light), 0.0);
+    // Normalized so an unrotated facet lands on exactly 1.0. Without this the paper
+    // meets the real DOM at the crease a few percent darker and the join shows up as a
+    // hairline, even though the surfaces are tangent there.
+    float flatShade = uAmbient + (1.0 - uAmbient) * max(light.z, 0.0);
+    float shade =
+      (uAmbient + (1.0 - uAmbient) * max(dot(normal, light), 0.0)) / max(flatShade, 0.001);
+
     float highlight = pow(max(dot(normal, halfVector), 0.0), uSpecularPower) * uSpecular;
 
-    // The reverse of the sheet reads as paper stock while the corner is barely lifted and
-    // becomes the other theme once it has properly turned over.
-    vec3 reverse = mix(uReverseTint, uBackColor, uReverseBlend);
+    // The reverse of the sheet reads as its own stock while the corner is barely lifted,
+    // and becomes the other theme once it has properly turned over.
+    vec3 reverse = mix(uFrontColor * uReverseShade, uBackColor, uReverseBlend);
     vec3 base = gl_FrontFacing ? uFrontColor : reverse;
 
     // Ambient occlusion through the tightest part of the bend.
@@ -115,7 +122,7 @@ export const paperFragmentShader = /* glsl */ `
     // Edge-on fragments darken slightly. That gradient is what reads as sheet thickness,
     // without extruding geometry that would look like card stock.
     float facing = abs(dot(normal, view));
-    float edge = 1.0 - uEdgeShade * (1.0 - smoothstep(0.0, 0.4, facing));
+    float edge = 1.0 - uEdgeShade * (1.0 - smoothstep(0.0, uEdgeSpread, facing));
 
     vec3 color = base * shade * occlusion * edge + highlight;
 
@@ -160,15 +167,19 @@ export const shadowFragmentShader = /* glsl */ `
     float lift = uRadius * 2.0;
     float spread = uSpread + lift * 0.55;
 
-    // The flap's silhouette sits roughly one radius past the crease; the shadow falls off
-    // from there toward the original corner.
+    // The flap's silhouette sits roughly one radius past the crease, so the shadow is
+    // darkest there and falls off toward the sheet's original corner.
     float beyond = arc - uRadius;
     float falloff = exp(-max(beyond, 0.0) / max(spread, 1.0));
-    float approach = smoothstep(-spread * 1.4, 0.0, beyond);
+
+    // Ease in from the crease. Everything inside this ramp is hidden behind the flap, so
+    // nothing is lost, and it stops the shadow bleeding through the flap's feathered
+    // edge as a hairline along the crease.
+    float enter = smoothstep(0.0, max(uRadius * 0.5, 8.0), arc);
 
     // Contact darkness eases off as the paper separates from the page.
     float contact = 1.0 / (1.0 + lift / 260.0);
-    float alpha = uStrength * falloff * mix(0.5, 1.0, approach) * contact;
+    float alpha = uStrength * falloff * enter * contact;
 
     if (alpha <= 0.003) discard;
     gl_FragColor = vec4(uShadowColor, alpha);
