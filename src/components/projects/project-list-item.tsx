@@ -11,7 +11,7 @@ export function ProjectListItem({ item, isLast }: ProjectListItemProps) {
   return (
     <li className="contents">
       <ContentRow
-        contentClassName={isLast ? undefined : "pb-4"}
+        contentClassName={isLast ? undefined : "pb-8"}
         sidebar={<ItemIcon src={item.icon} alt="" />}
       >
         <header className="text-sm lowercase">

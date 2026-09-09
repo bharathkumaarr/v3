@@ -20,8 +20,9 @@ export function Hero() {
 
       <ContentRow
         sidebar={
-          <p className="text-md lowercase text-neutral-8">*</p>
+          <p className="mt-8 text-md lowercase text-neutral-8">*</p>
         }
+        contentClassName="mt-8"
       >
         <p className="text-pretty text-sm lowercase text-neutral-7">
           {hero.footnote}
