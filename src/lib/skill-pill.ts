@@ -14,19 +14,21 @@ const RADIUS = 16;
 /** Half-width of the concave notch that joins two bubbles. */
 const NOTCH = 10.5;
 /**
- * Advance widths at 12px sans (matches `text-xs` + Geist). Tuned so each bubble hugs
- * its letters the way a CSS pill with `px-2.5` would, instead of charging every
- * character the same flat width.
+ * Advance widths at 12px Innovator Grotesk Regular (matches `text-xs` + frederic.ooo).
+ * Tuned so each bubble hugs its letters the way a CSS pill with `px-2.5` would, instead
+ * of charging every character the same flat width.
  */
 const CHAR_ADVANCE: Record<string, number> = {
-  default: 6.7,
-  i: 3.1,
-  l: 3.1,
-  f: 3.9,
-  t: 3.9,
-  r: 4.3,
-  j: 3.5,
-  " ": 3.2,
+  default: 6.35,
+  i: 2.7,
+  l: 2.7,
+  j: 2.7,
+  f: 4.5,
+  t: 4.67,
+  r: 4.76,
+  m: 10.72,
+  w: 9.46,
+  " ": 2.88,
 };
 const SEGMENT_PAD = 18;
 
