@@ -1,10 +1,34 @@
-/** Original frederic.ooo connected pill path (viewBox 235×32) */
-const REFERENCE_PATH =
-  "M0.5 16C0.5 7.43959 7.43959 0.5 16 0.5H48C53.7589 0.5 58.785 3.64044 61.4579 8.30461C62.1776 9.56047 63.4774 10.5 65 10.5C66.5226 10.5 67.8224 9.56047 68.5421 8.30461C71.215 3.64044 76.2411 0.5 82 0.5H150C155.932 0.5 161.086 3.83189 163.692 8.72858C164.237 9.75252 165.282 10.5 166.5 10.5C167.718 10.5 168.763 9.75252 169.308 8.72858C171.914 3.83189 177.068 0.5 183 0.5H219C227.56 0.5 234.5 7.43959 234.5 16C234.5 24.5604 227.56 31.5 219 31.5H183C177.068 31.5 171.914 28.1681 169.308 23.2714C168.763 22.2475 167.718 21.5 166.5 21.5C165.282 21.5 164.237 22.2475 163.692 23.2714C161.086 28.1681 155.932 31.5 150 31.5H82C76.2411 31.5 71.215 28.3596 68.5421 23.6954C67.8224 22.4395 66.5226 21.5 65 21.5C63.4774 21.5 62.1776 22.4395 61.4579 23.6954C58.785 28.3596 53.7589 31.5 48 31.5H16C7.43959 31.5 0.5 24.5604 0.5 16Z";
+/**
+ * Connected skill-pill outline: three (or fewer) rounded bubbles joined by concave
+ * notches, sized from the labels rather than by warping a fixed reference path.
+ *
+ * Earlier this remapped frederic.ooo's 235×32 path. That path's pinch points and its
+ * declared segment joints disagreed, so after remapping the middle outline ran wider
+ * than the text box sitting inside it — "frontend" looked padded even when its
+ * measured width was only a few pixels past "backend". Building the path from the
+ * segment widths keeps the outline and the labels on the same geometry.
+ */
 
-const REF_JOINTS = [82, 150, 235] as const;
-const CHAR_WIDTH = 6.4;
-const SEGMENT_PAD = 12;
+const HEIGHT = 32;
+const RADIUS = 16;
+/** Half-width of the concave notch that joins two bubbles. */
+const NOTCH = 10.5;
+/**
+ * Advance widths at 12px sans (matches `text-xs` + Geist). Tuned so each bubble hugs
+ * its letters the way a CSS pill with `px-2.5` would, instead of charging every
+ * character the same flat width.
+ */
+const CHAR_ADVANCE: Record<string, number> = {
+  default: 6.7,
+  i: 3.1,
+  l: 3.1,
+  f: 3.9,
+  t: 3.9,
+  r: 4.3,
+  j: 3.5,
+  " ": 3.2,
+};
+const SEGMENT_PAD = 18;
 
 export type PillSegment = {
   label: string;
@@ -13,79 +37,128 @@ export type PillSegment = {
 };
 
 function segmentWidth(label: string) {
-  return Math.ceil(label.length * CHAR_WIDTH + SEGMENT_PAD);
+  let advance = 0;
+  for (const char of label) {
+    advance += CHAR_ADVANCE[char] ?? CHAR_ADVANCE.default;
+  }
+  return Math.ceil(advance + SEGMENT_PAD);
 }
 
-function mapX(x: number, targetJoints: [number, number, number]) {
-  const [t1, t2, tEnd] = targetJoints;
-  const [o1, o2, oEnd] = REF_JOINTS;
-
-  if (x <= o1) return (x / o1) * t1;
-  if (x <= o2) return t1 + ((x - o1) / (o2 - o1)) * (t2 - t1);
-  return t2 + ((x - o2) / (oEnd - o2)) * (tEnd - t2);
-}
-
-function formatNum(n: number) {
-  const rounded = Math.round(n * 10000) / 10000;
+function format(n: number) {
+  const rounded = Math.round(n * 100) / 100;
   return Number.isInteger(rounded) ? String(rounded) : String(rounded);
 }
 
-function remapPath(path: string, targetJoints: [number, number, number]) {
-  const tokens = path.match(/[A-Za-z]|-?\d+\.?\d*/g) ?? [];
-  const out: string[] = [];
-  let i = 0;
+/**
+ * One continuous outline. Bubbles are full-height stadiums; where two meet, the top and
+ * bottom edge dive into a circular notch centred on the joint so the chain reads as
+ * linked pods rather than a single sausage.
+ */
+function buildPath(widths: number[]): string {
+  if (widths.length === 0) return "";
 
-  while (i < tokens.length) {
-    const cmd = tokens[i++];
-    out.push(cmd);
-
-    if (cmd === "H") {
-      out.push(formatNum(mapX(Number(tokens[i++]), targetJoints)));
-    } else if (cmd === "V") {
-      out.push(tokens[i++]);
-    } else if (cmd === "Z") {
-      continue;
-    } else if ("MCL".includes(cmd)) {
-      const coords: number[] = [];
-      while (i < tokens.length && !/[A-Za-z]/.test(tokens[i]!)) {
-        coords.push(Number(tokens[i++]));
-      }
-      for (let j = 0; j < coords.length; j += 2) {
-        out.push(formatNum(mapX(coords[j]!, targetJoints)));
-        out.push(formatNum(coords[j + 1]!));
-      }
-    }
+  const total = widths.reduce((sum, w) => sum + w, 0);
+  const joints: number[] = [];
+  let cursor = 0;
+  for (let i = 0; i < widths.length - 1; i++) {
+    cursor += widths[i]!;
+    joints.push(cursor);
   }
 
-  let result = out[0] ?? "";
-  for (let j = 1; j < out.length; j++) {
-    result += (/[A-Za-z]/.test(out[j]!) ? "" : " ") + out[j];
+  const parts: string[] = [];
+
+  // Left cap.
+  parts.push(`M${format(0.5)} ${format(RADIUS)}`);
+  parts.push(
+    `C${format(0.5)} ${format(7.44)} ${format(7.44)} ${format(0.5)} ${format(RADIUS)} ${format(0.5)}`,
+  );
+
+  // Top edge, left → right, diving into a notch at every joint.
+  let x = RADIUS;
+  for (const joint of joints) {
+    const flatEnd = joint - NOTCH;
+    if (flatEnd > x) parts.push(`H${format(flatEnd)}`);
+    parts.push(notch(joint, "top", "ltr"));
+    x = joint + NOTCH;
   }
-  return result;
+  parts.push(`H${format(total - RADIUS)}`);
+
+  // Right cap.
+  parts.push(
+    `C${format(total - 7.44)} ${format(0.5)} ${format(total - 0.5)} ${format(7.44)} ${format(total - 0.5)} ${format(RADIUS)}`,
+  );
+  parts.push(
+    `C${format(total - 0.5)} ${format(HEIGHT - 7.44)} ${format(total - 7.44)} ${format(HEIGHT - 0.5)} ${format(total - RADIUS)} ${format(HEIGHT - 0.5)}`,
+  );
+
+  // Bottom edge, right → left, mirroring the top notches.
+  x = total - RADIUS;
+  for (let i = joints.length - 1; i >= 0; i--) {
+    const joint = joints[i]!;
+    const flatEnd = joint + NOTCH;
+    if (x > flatEnd) parts.push(`H${format(flatEnd)}`);
+    parts.push(notch(joint, "bottom", "rtl"));
+    x = joint - NOTCH;
+  }
+  parts.push(`H${format(RADIUS)}`);
+
+  // Close on the left cap.
+  parts.push(
+    `C${format(7.44)} ${format(HEIGHT - 0.5)} ${format(0.5)} ${format(HEIGHT - 7.44)} ${format(0.5)} ${format(RADIUS)}`,
+  );
+  parts.push("Z");
+
+  return parts.join("");
+}
+
+function notch(
+  joint: number,
+  side: "top" | "bottom",
+  direction: "ltr" | "rtl",
+): string {
+  // Cubic approximation of a circular bite, matching the frederic.ooo notch so the
+  // chain still reads as part of the same visual language.
+  const yEdge = side === "top" ? 0.5 : HEIGHT - 0.5;
+  const yPinch = side === "top" ? 10.5 : HEIGHT - 10.5;
+  const yMid = side === "top" ? 3.64 : HEIGHT - 3.64;
+
+  const left = joint - NOTCH;
+  const right = joint + NOTCH;
+  const leftIn = joint - 1.5;
+  const rightIn = joint + 1.5;
+  const leftCtrl = joint - NOTCH * 0.45;
+  const rightCtrl = joint + NOTCH * 0.45;
+
+  if (direction === "ltr") {
+    return [
+      `C${format(leftCtrl)} ${format(yEdge)} ${format(leftIn)} ${format(yMid)} ${format(joint)} ${format(yPinch)}`,
+      `C${format(rightIn)} ${format(yMid)} ${format(rightCtrl)} ${format(yEdge)} ${format(right)} ${format(yEdge)}`,
+    ].join("");
+  }
+
+  return [
+    `C${format(rightCtrl)} ${format(yEdge)} ${format(rightIn)} ${format(yMid)} ${format(joint)} ${format(yPinch)}`,
+    `C${format(leftIn)} ${format(yMid)} ${format(leftCtrl)} ${format(yEdge)} ${format(left)} ${format(yEdge)}`,
+  ].join("");
 }
 
 export function buildSkillPill(labels: string[]) {
-  const tags = labels.slice(0, 3).map((l) => l.toLowerCase());
+  const tags = labels.slice(0, 3).map((label) => label.toLowerCase());
   const widths = tags.map(segmentWidth);
-  const totalWidth = widths.reduce((sum, w) => sum + w, 0);
+  const totalWidth = widths.reduce((sum, width) => sum + width, 0);
 
   let offset = 0;
   const segments: PillSegment[] = tags.map((label, index) => {
-    const seg = { label, x: offset, width: widths[index]! };
-    offset += widths[index]!;
-    return seg;
+    const width = widths[index]!;
+    const segment = { label, x: offset, width };
+    offset += width;
+    return segment;
   });
-
-  const joints: [number, number, number] = [
-    widths[0] ?? 0,
-    (widths[0] ?? 0) + (widths[1] ?? 0),
-    totalWidth,
-  ];
 
   return {
     width: totalWidth,
-    height: 32,
-    path: remapPath(REFERENCE_PATH, joints),
+    height: HEIGHT,
+    path: buildPath(widths),
     segments,
   };
 }
