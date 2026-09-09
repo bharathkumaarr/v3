@@ -182,26 +182,6 @@ export const pageCurlConfig = {
 
   /** Frames of stillness after which the render loop parks itself. */
   idleFramesBeforePark: 8,
-
-  /**
-   * Motion-driven paper acoustics. Volumes stay low: this is a portfolio, not a game.
-   * Generated in the Web Audio API so there are no sample files to fetch or license.
-   */
-  audio: {
-    masterVolume: 0.9,
-    /** Peak continuous rustle while dragging at `fullSpeed`. */
-    rustleVolume: 0.045,
-    /** Peak of a short crinkle burst. */
-    crinkleVolume: 0.055,
-    /** Fold speed (px/s) that maps to full rustle intensity. */
-    fullSpeed: 1400,
-    /** Minimum fold speed before a jerk can throw a crinkle. */
-    crinkleMinSpeed: 180,
-    /** Sudden speed change (px/s) that counts as a paper jerk. */
-    crinkleJerk: 420,
-    /** Shortest gap between crinkle bursts, so a noisy drag does not stutter. */
-    crinkleCooldownMs: 70,
-  },
 } as const;
 
 export type PageCurlConfig = typeof pageCurlConfig;

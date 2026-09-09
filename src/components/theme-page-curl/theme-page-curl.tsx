@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { useTheme } from "next-themes";
 import { revealPolygon, type FoldSolution, type Viewport } from "./page-curl-math";
-import { PaperAudio } from "./paper-audio";
 import type { PaperRenderer } from "./paper-renderer";
 import { ThemeFlipButton } from "./theme-flip-button";
 import { ThemeRevealLayer } from "./theme-reveal-layer";
@@ -77,19 +76,9 @@ export function ThemePageCurl({ children }: { children: ReactNode }) {
 
   const pendingTheme = useRef<ThemeName | null>(null);
   const fallbackBusy = useRef(false);
-  // Stable for the lifetime of the shell. Construction is cheap and does not open an
-  // AudioContext; that waits for the first press so the browser allows it.
-  const [audio] = useState(() => new PaperAudio());
 
   const theme: ThemeName = resolvedTheme === "dark" ? "dark" : "light";
   const interactive = mounted && !webglFailed && !reducedMotion;
-
-  useEffect(() => {
-    // Reduced motion skips the physical turn, so it skips the paper sounds with it.
-    audio.setEnabled(!reducedMotion);
-  }, [audio, reducedMotion]);
-
-  useEffect(() => () => audio.dispose(), [audio]);
 
   /**
    * WebGL is assumed available and disproved on first contact, rather than probed with a
@@ -150,7 +139,6 @@ export function ThemePageCurl({ children }: { children: ReactNode }) {
     onSyncReveal: syncRevealTheme,
     onSyncScroll: syncScroll,
     onPhaseChange: handlePhaseChange,
-    audio: audio,
   });
 
   usePaperRenderer({
@@ -210,8 +198,6 @@ export function ThemePageCurl({ children }: { children: ReactNode }) {
 
     fallbackBusy.current = true;
     syncScroll();
-    audio.unlock();
-    audio.turn();
 
     const animation = layer.animate(
       [{ clipPath: WIPE_CLOSED }, { clipPath: WIPE_OPEN }],
@@ -239,7 +225,7 @@ export function ThemePageCurl({ children }: { children: ReactNode }) {
     syncRevealTheme();
 
     fallbackBusy.current = false;
-  }, [audio, isBusy, reducedMotion, setTheme, syncRevealTheme, syncScroll, theme]);
+  }, [isBusy, reducedMotion, setTheme, syncRevealTheme, syncScroll, theme]);
 
   const handleFallbackPointer = useCallback(() => {
     if (interactive) return;
