@@ -199,7 +199,9 @@ export function sheetSpan(dirX: number, dirY: number, viewport: Viewport): numbe
  * The part of the viewport the sheet no longer covers, as a `clip-path` polygon.
  *
  * This is the viewport rectangle clipped to the half-plane past the crease line
- * (Sutherland–Hodgman against a single edge).
+ * (Sutherland–Hodgman against a single edge). The vacated corner is painted over by the
+ * WebGL underside fill during the early drag so empty page margin does not flash through
+ * as a blank slab in front of the fold.
  */
 export function revealPolygon(fold: FoldSolution, viewport: Viewport): string {
   const reach = fold.creaseDistance - REVEAL_INSET;
@@ -213,15 +215,29 @@ export function revealPolygon(fold: FoldSolution, viewport: Viewport): string {
     { x: 0, y: viewport.height },
   ];
 
-  // The turned side of the crease is the one holding the grabbed corner, which sits at
-  // axis distance zero, so points inside the reveal are *below* the crease distance.
-  const inside = (p: Vec2) => reach - axisDistance(p, corner, fold.dirX, fold.dirY);
+  const clipped = clipToHalfPlane(
+    rect,
+    (p) => reach - axisDistance(p, corner, fold.dirX, fold.dirY),
+  );
+
+  if (clipped.length < 3) return "polygon(0px 0px, 0px 0px, 0px 0px)";
+
+  const points = clipped
+    .map((p) => `${p.x.toFixed(2)}px ${p.y.toFixed(2)}px`)
+    .join(", ");
+
+  return `polygon(${points})`;
+}
+
+/** Sutherland–Hodgman against one half-plane. `inside` is signed distance to the plane. */
+function clipToHalfPlane(input: Vec2[], inside: (p: Vec2) => number): Vec2[] {
+  if (input.length === 0) return input;
 
   const output: Vec2[] = [];
 
-  for (let i = 0; i < rect.length; i++) {
-    const current = rect[i];
-    const next = rect[(i + 1) % rect.length];
+  for (let i = 0; i < input.length; i++) {
+    const current = input[i]!;
+    const next = input[(i + 1) % input.length]!;
     const dCurrent = inside(current);
     const dNext = inside(next);
 
@@ -236,13 +252,7 @@ export function revealPolygon(fold: FoldSolution, viewport: Viewport): string {
     }
   }
 
-  if (output.length < 3) return "polygon(0px 0px, 0px 0px, 0px 0px)";
-
-  const points = output
-    .map((p) => `${p.x.toFixed(2)}px ${p.y.toFixed(2)}px`)
-    .join(", ");
-
-  return `polygon(${points})`;
+  return output;
 }
 
 /** True once the crease has swept past every viewport corner. */

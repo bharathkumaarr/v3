@@ -23,8 +23,8 @@ export const pageCurlConfig = {
    * phone screen.
    */
   affordance: {
-    idleCurl: 40,
-    hoverCurl: 70,
+    idleCurl: 48,
+    hoverCurl: 78,
     referenceDiagonal: 1160,
     minScale: 0.72,
     maxScale: 1.2,
@@ -44,15 +44,18 @@ export const pageCurlConfig = {
      * proportions. Just over a quarter turn puts about three parts roll to two parts
      * revealed page, which is what a lifted poster corner looks like.
      */
-    restWrap: 1.6,
     /**
-     * Widest the roll gets, as an absolute size and as a share of the viewport diagonal.
-     * Past this it stops fattening and wraps tighter instead. Without a ceiling the roll
-     * grows in proportion to the pull, and a long drag ends up as one enormous soft
-     * gradient across the page rather than a sheet being turned.
+     * Wrap angle the roll holds while it still has room to grow. Higher wraps keep the
+     * roll as a thin curled edge instead of a wide blank bill of paper colour — the mesh
+     * is painted flat, so a fat roll reads as empty space in front of the fold.
      */
-    radiusMaxPx: 150,
-    radiusMaxRatio: 0.115,
+    restWrap: 2.55,
+    /**
+     * Widest the roll gets. Kept tight on purpose: beyond this the flap stops looking
+     * like a page edge and becomes a featureless slab covering the site.
+     */
+    radiusMaxPx: 58,
+    radiusMaxRatio: 0.055,
     /** Hard stop so the sheet can never spiral into itself. */
     maxAngle: Math.PI * 1.15,
     /**

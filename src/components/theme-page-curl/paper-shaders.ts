@@ -162,6 +162,11 @@ export const shadowFragmentShader = /* glsl */ `
   uniform float uSpillOnset;
   uniform float uMinContact;
   uniform float uContactFade;
+  uniform float uProgress;
+  uniform float uReverseBlend;
+  uniform float uReverseShade;
+  uniform vec3 uFrontColor;
+  uniform vec3 uBackColor;
   uniform vec3 uShadowColor;
 
   varying vec2 vWorld;
@@ -175,6 +180,27 @@ export const shadowFragmentShader = /* glsl */ `
 
     // Contact darkness eases off as the paper separates from the page, down to a floor.
     float contact = mix(1.0, uMinContact, clamp(lift / uContactFade, 0.0, 1.0));
+
+    // Beyond the roll, toward the original corner, the sheet has left the page. Without
+    // a fill that region shows whichever theme is underneath — usually empty margin —
+    // as a blank slab in front of the fold. Paint it as the underside of the sheet so
+    // the fold reads as continuous paper; fade out late in the turn so the real reveal
+    // can take over for the commit.
+    if (arc > uRadius * 0.9) {
+      float fill = (1.0 - smoothstep(0.32, 0.78, uProgress)) *
+        smoothstep(uRadius * 0.7, uRadius * 1.05, arc);
+      if (fill > 0.01) {
+        // Bias toward the theme underneath so the vacated corner matches the fold's
+        // underside instead of flashing the current page's empty margin.
+        vec3 reverse = mix(
+          uFrontColor * uReverseShade,
+          uBackColor,
+          max(uReverseBlend, 0.72)
+        );
+        gl_FragColor = vec4(reverse, fill);
+        return;
+      }
+    }
 
     float alpha;
 
