@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { affordanceCurl, grabZoneRadius, pageCurlConfig } from "./page-curl-config";
+import type { PaperAudio } from "./paper-audio";
 import {
   clamp,
   coversViewport,
@@ -44,6 +45,8 @@ type Options = {
   onSyncScroll: () => void;
   /** Cursor affordance only; fires on phase transitions, not per frame. */
   onPhaseChange?: (phase: CurlPhase) => void;
+  /** Motion-driven paper sounds. Owned by the orchestrator so the fallback path shares it. */
+  audio?: PaperAudio | null;
 };
 
 /** Guard so a stuck theme write can never freeze the page mid-turn. */
@@ -65,12 +68,15 @@ export function usePageCurl({
   onSyncReveal,
   onSyncScroll,
   onPhaseChange,
+  audio = null,
 }: Options) {
   const [viewport, setViewport] = useState<Viewport>(() => makeViewport(1, 1));
   const [grabRadius, setGrabRadius] = useState<number>(pageCurlConfig.grabZone.min);
 
   const viewportRef = useRef(viewport);
   const phaseRef = useRef<CurlPhase>("idle");
+  const audioRef = useRef(audio);
+  audioRef.current = audio;
 
   // Fold distance and fold direction, each integrated as a damped spring.
   const distance = useRef(makeSpring(0));
@@ -99,8 +105,16 @@ export function usePageCurl({
   const setPhase = useCallback(
     (next: CurlPhase) => {
       if (phaseRef.current === next) return;
+      const previous = phaseRef.current;
       phaseRef.current = next;
       onPhaseChange?.(next);
+
+      const sound = audioRef.current;
+      if (!sound) return;
+
+      if (next === "hover" && previous === "idle") sound.hoverLift();
+      if (next === "commit") sound.commit(distance.current.value > 0 ? 0.6 : 0.35);
+      if (previous === "drag" && (next === "hover" || next === "idle")) sound.snapBack();
     },
     [onPhaseChange],
   );
@@ -198,6 +212,8 @@ export function usePageCurl({
     stepSpring(distance.current, distanceTarget.current, activeSpring.current, dt);
     stepSpring(angle.current, angleTarget.current, activeSpring.current, dt);
 
+    audioRef.current?.setMotion(distance.current.velocity, phase);
+
     const foldAngle = clamp(angle.current.value, Math.PI / 2, Math.PI);
     const fold = solveFold(
       Math.max(0, distance.current.value),
@@ -245,6 +261,7 @@ export function usePageCurl({
     // Land exactly on the target so the parked canvas is pixel-stable.
     settleSpring(distance.current, distanceTarget.current);
     settleSpring(angle.current, angleTarget.current);
+    audioRef.current?.setMotion(0, "idle");
 
     const parkedAngle = clamp(angleTarget.current, Math.PI / 2, Math.PI);
     onFrame(
@@ -332,6 +349,8 @@ export function usePageCurl({
 
       velocity.current.reset();
       element.setPointerCapture(event.pointerId);
+      audioRef.current?.unlock();
+      audioRef.current?.grab();
       setPhase("drag");
       onSyncScroll();
       wake();
