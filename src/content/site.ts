@@ -50,7 +50,7 @@ export const experience: ExperienceItem[] = [
     industry: "insurtech",
     location: "india",
     description:
-      "fullstack on the core saas b2b2c platform. apis, web app, and whatever sits between them.",
+      "software engineer working fullstack across backend and frontend on the core saas b2b2c platform.",
     icon: "/icons/oneassure.svg",
   },
   {
