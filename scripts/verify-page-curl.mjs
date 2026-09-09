@@ -229,19 +229,34 @@ await drag(page, [
 ]);
 report.afterReverse = await page.evaluate(probe);
 
-// Two gestures in a row must not stack up.
-await drag(page, [
+/**
+ * A second gesture grabbed while the first is still turning must not queue a second
+ * flip. Both are committing pulls, and the second starts immediately after the first is
+ * released, so it lands mid commit animation. Exactly one flip should come out.
+ *
+ * Recorded either side of the second gesture, because one before-and-after reading
+ * cannot tell nothing happening apart from it happening twice.
+ */
+const committingPull = [
   [1274, 6],
   [1100, 160],
-  [700, 520],
-], { release: false });
+  [640, 600],
+  [420, 780],
+];
+
+report.rapid = { before: (await page.evaluate(probe)).theme };
+await drag(page, committingPull, { release: false });
 await page.mouse.up();
+
 await page.mouse.move(1274, 6);
 await page.mouse.down();
-await page.mouse.move(900, 380);
+for (const [x, y] of committingPull.slice(1)) {
+  await page.mouse.move(x, y);
+  await wait(25);
+}
 await page.mouse.up();
-await wait(1800);
-report.afterRapid = await page.evaluate(probe);
+await wait(2200);
+report.rapid.afterBoth = (await page.evaluate(probe)).theme;
 
 await page.keyboard.press("Tab");
 await wait(150);
