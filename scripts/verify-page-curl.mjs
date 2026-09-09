@@ -58,6 +58,22 @@ function revealReach() {
   return first ? Math.round(window.innerWidth - Number(first[1])) : null;
 }
 
+/**
+ * Force the light theme back on without going through the gesture.
+ *
+ * The screenshots are far easier to read from a known starting theme: the revealed layer
+ * is always the opposite of the current one, so a frame captured mid-sequence can show a
+ * dark page with a light reveal and look inverted when nothing is wrong.
+ */
+async function resetToLight(page) {
+  // Clearing the key rather than writing "light" into it, so the reload lands on exactly
+  // the same state as a first-ever visit, which the provider resolves to light.
+  await page.evaluate(() => localStorage.removeItem("theme"));
+  await page.reload({ waitUntil: "networkidle0" });
+  await wait(900);
+  return page.evaluate(probe);
+}
+
 async function drag(page, path, { release = true, trace } = {}) {
   const [start, ...rest] = path;
   await page.mouse.move(start[0], start[1]);
@@ -69,6 +85,11 @@ async function drag(page, path, { release = true, trace } = {}) {
   }
   if (release) {
     await page.mouse.up();
+    if (trace) {
+      await wait(60);
+      const t = await page.evaluate(probe);
+      trace.push(`released -> theme ${t.theme}, reach ${await page.evaluate(revealReach)}`);
+    }
     await wait(1400);
   }
 }
@@ -84,6 +105,7 @@ await wait(1200);
 const corner = (name, box) => page.screenshot({ path: `${OUT}/${name}.png`, clip: box });
 
 report.idle = await page.evaluate(probe);
+await page.screenshot({ path: `${OUT}/00-idle-full.png` });
 await corner("01-idle", { x: 1080, y: 0, width: 200, height: 200 });
 
 await page.mouse.move(1240, 40);
@@ -110,6 +132,7 @@ await drag(
 await page.mouse.up();
 await wait(1400);
 
+await resetToLight(page);
 await drag(
   page,
   [
@@ -125,6 +148,7 @@ await corner("03-drag-small", { x: 980, y: 0, width: 300, height: 300 });
 await page.mouse.up();
 await wait(1400);
 
+await resetToLight(page);
 await drag(
   page,
   [
@@ -141,6 +165,7 @@ await page.mouse.up();
 await wait(1400);
 
 // The revealed copy is a fixed layer, so it has to be offset to match document scroll.
+await resetToLight(page);
 await page.evaluate(() => window.scrollTo(0, 600));
 await wait(300);
 await drag(
@@ -165,12 +190,18 @@ await page.evaluate(() => window.scrollTo(0, 0));
 await wait(300);
 
 // Released well short of the threshold: must spring back without changing the theme.
-await drag(page, [
-  [1274, 6],
-  [1240, 40],
-  [1200, 80],
-  [1230, 40],
-]);
+report.beforeSnapBack = await resetToLight(page);
+report.snapBackTrace = [];
+await drag(
+  page,
+  [
+    [1274, 6],
+    [1240, 40],
+    [1200, 80],
+    [1230, 40],
+  ],
+  { trace: report.snapBackTrace },
+);
 report.afterSnapBack = await page.evaluate(probe);
 
 // Released past the threshold: must carry through and persist.
