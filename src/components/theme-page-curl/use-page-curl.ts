@@ -217,9 +217,9 @@ export function usePageCurl({
       const timedOut = now - settleStartedAt.current > SETTLE_TIMEOUT_MS;
       if (isThemeApplied() || timedOut) {
         // Collapse instantly while the revealed theme still fills the screen, so the
-        // handoff to the real DOM lands on identical pixels. Clear the clip path in this
-        // same tick before re-pointing the reveal — otherwise React paints the new (wrong)
-        // opposite theme while the layer still covers the viewport and links color-tween.
+        // handoff to the real DOM lands on identical pixels. Clear + hide the reveal in
+        // this same tick before re-pointing its theme — otherwise filled contact pills
+        // flash when the opposite-theme class swaps under a still-composited layer.
         settleSpring(distance.current, 0);
         settleSpring(angle.current, angleTarget.current);
         distanceTarget.current = 0;
@@ -459,10 +459,12 @@ export function usePageCurl({
     [],
   );
 
-  const isBusy = useCallback(
-    () => phaseRef.current === "commit" || phaseRef.current === "settling",
-    [],
-  );
+  const isBusy = useCallback(() => {
+    if (phaseRef.current === "commit" || phaseRef.current === "settling") return true;
+    // Hold the busy flag through the post-commit reveal swap so theme effects cannot
+    // race the handoff and flash contact pills.
+    return performance.now() < holdUntil.current;
+  }, []);
 
   return { viewport, grabRadius, phaseRef, wake, isBusy };
 }

@@ -103,7 +103,13 @@ export function ThemePageCurl({ children }: { children: ReactNode }) {
 
   const handleFrame = useCallback((fold: FoldSolution, viewport: Viewport) => {
     const layer = layerRef.current;
-    if (layer) layer.style.clipPath = revealPolygon(fold, viewport);
+    if (layer) {
+      const clip = revealPolygon(fold, viewport);
+      layer.style.clipPath = clip;
+      // Empty clip alone is not enough: some engines still composite descendants when the
+      // reveal theme class flips, which makes filled contact pills flash. Hide fully when idle.
+      layer.style.visibility = fold.flat || clip === EMPTY_CLIP ? "hidden" : "visible";
+    }
 
     rendererRef.current?.draw({
       dirX: fold.dirX,
@@ -221,6 +227,7 @@ export function ThemePageCurl({ children }: { children: ReactNode }) {
     // Swap under cover: the revealed copy fills the screen and already matches the new
     // theme, so dropping back to the real DOM is a no-op on screen.
     layer.style.clipPath = EMPTY_CLIP;
+    layer.style.visibility = "hidden";
     animation.cancel();
     syncRevealTheme();
 

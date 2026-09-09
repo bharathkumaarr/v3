@@ -35,10 +35,13 @@ export const ThemeRevealLayer = memo(function ThemeRevealLayer({
       ref={layerRef}
       className={cn(
         theme,
-        "pointer-events-none fixed inset-0 z-10 overflow-hidden [&_*]:transition-none",
+        // !important so pill/link transition utilities cannot outrank this and color-tween
+        // when the reveal theme class flips under an empty clip.
+        "pointer-events-none fixed inset-0 z-10 overflow-hidden [&_*]:!transition-none",
       )}
       style={{
         clipPath: "polygon(0px 0px, 0px 0px, 0px 0px)",
+        visibility: "hidden",
         background: "var(--neutral-1)",
         color: "var(--neutral-8)",
       }}

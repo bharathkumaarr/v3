@@ -41,7 +41,7 @@ export function ExternalLink({ href, children, className }: ExternalLinkProps) {
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        "-mx-2 -my-1 rounded-lg px-2 py-1 lowercase text-neutral-8 transition-[background-color]",
+        "-mx-2 -my-1 rounded-lg px-2 py-1 lowercase text-neutral-8",
         "hover:bg-neutral-2 active:bg-neutral-3",
         "focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-7",
         className,
@@ -65,7 +65,7 @@ export function PillLink({ href, children }: PillLinkProps) {
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        "rounded-full bg-neutral-2 px-3 py-2 text-sm lowercase text-neutral-8 transition-[background-color]",
+        "rounded-full bg-neutral-2 px-3 py-2 text-sm lowercase text-neutral-8",
         "hover:bg-neutral-3 active:bg-neutral-4",
         "focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-7",
       )}
