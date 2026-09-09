@@ -132,8 +132,13 @@ export function usePageCurl({
       // push the corner off by the scrollbar's width.
       const width = document.documentElement.clientWidth;
       const height = document.documentElement.clientHeight;
-      const next = makeViewport(width, height);
 
+      // Bail on a no-op resize. Mobile browsers fire `resize` when their chrome shows or
+      // hides, and a new viewport object would cancel an in-flight gesture for nothing.
+      const current = viewportRef.current;
+      if (current.width === width && current.height === height) return;
+
+      const next = makeViewport(width, height);
       viewportRef.current = next;
       setViewport(next);
       setGrabRadius(grabZoneRadius(width, height));
