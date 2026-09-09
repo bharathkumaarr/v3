@@ -229,6 +229,9 @@ export class PaperRenderer {
         uRadius: { value: 0 },
         uStrength: { value: shadow.strength },
         uSpread: { value: shadow.spread },
+        uSpill: { value: shadow.spill },
+        uSpillReach: { value: shadow.spillReach },
+        uSpillOnset: { value: shadow.spillOnset },
         uShadowColor: { value: new Vector3(0.04, 0.06, 0.08) },
       },
     });

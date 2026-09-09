@@ -81,10 +81,16 @@ export function cornerOf(viewport: Viewport): Vec2 {
   return { x: viewport.width, y: 0 };
 }
 
-/** Default fold direction: straight down the diagonal toward the opposite corner. */
-export function defaultDirection(viewport: Viewport): Vec2 {
-  const length = viewport.diagonal || 1;
-  return { x: -viewport.width / length, y: viewport.height / length };
+/**
+ * Fold direction the corner rests at when nothing is pulling it.
+ *
+ * Forty-five degrees inward rather than along the viewport diagonal. A dog-ear folds
+ * about the bisector of the two edges that meet at the corner, so the roll comes off the
+ * top and right edges by the same amount; aiming at the opposite corner instead skews
+ * the roll flatter the wider the window gets, and it stops reading as a corner.
+ */
+export function defaultDirection(): Vec2 {
+  return { x: -Math.SQRT1_2, y: Math.SQRT1_2 };
 }
 
 export function solveFold(
@@ -251,7 +257,7 @@ export function foldFromPointer(pointer: Vec2, viewport: Viewport) {
 
   const length = Math.hypot(dx, dy);
   if (length < EPSILON) {
-    const fallback = defaultDirection(viewport);
+    const fallback = defaultDirection();
     return { distance: 0, dirX: fallback.x, dirY: fallback.y };
   }
 

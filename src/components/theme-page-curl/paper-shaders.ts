@@ -155,31 +155,47 @@ export const shadowFragmentShader = /* glsl */ `
   uniform float uRadius;
   uniform float uStrength;
   uniform float uSpread;
+  uniform float uSpill;
+  uniform float uSpillReach;
+  uniform float uSpillOnset;
   uniform vec3 uShadowColor;
 
   varying vec2 vWorld;
 
   void main() {
     float arc = uCrease - dot(vWorld - uCorner, uDir);
-    if (arc <= 0.0 || uRadius <= 0.0) discard;
+    if (uRadius <= 0.0) discard;
 
     // How far the sheet has lifted, and therefore how soft and spread out its shadow is.
     float lift = uRadius * 2.0;
-    float spread = uSpread + lift * 0.55;
-
-    // The flap's silhouette sits roughly one radius past the crease, so the shadow is
-    // darkest there and falls off toward the sheet's original corner.
-    float beyond = arc - uRadius;
-    float falloff = exp(-max(beyond, 0.0) / max(spread, 1.0));
-
-    // Ease in from the crease. Everything inside this ramp is hidden behind the flap, so
-    // nothing is lost, and it stops the shadow bleeding through the flap's feathered
-    // edge as a hairline along the crease.
-    float enter = smoothstep(0.0, max(uRadius * 0.5, 8.0), arc);
 
     // Contact darkness eases off as the paper separates from the page.
     float contact = 1.0 / (1.0 + lift / 260.0);
-    float alpha = uStrength * falloff * enter * contact;
+
+    float alpha;
+
+    if (arc > 0.0) {
+      // Revealed side. The roll's silhouette sits one radius past the crease, so the
+      // shade is deepest there and falls off toward the sheet's original corner.
+      float spread = uSpread + lift * 0.55;
+      float falloff = exp(-max(arc - uRadius, 0.0) / max(spread, 1.0));
+
+      // Ease in from the crease. Everything inside this ramp is hidden behind the roll,
+      // so nothing is lost, and it stops the shade bleeding through the roll's feathered
+      // edge as a hairline along the fold.
+      float enter = smoothstep(0.0, max(uRadius * 0.5, 8.0), arc);
+
+      alpha = uStrength * falloff * enter * contact;
+    } else {
+      // Untouched page. The roll overhangs it and drops a soft shadow across, which is
+      // what seats the fold on the page. Ramped in over a few pixels so it meets the
+      // revealed side at zero and the crease itself stays seamless.
+      float past = -arc;
+      float reach = uSpillReach + lift * 0.35;
+      alpha =
+        uStrength * uSpill * contact *
+        smoothstep(0.0, uSpillOnset, past) * exp(-past / max(reach, 1.0));
+    }
 
     if (alpha <= 0.003) discard;
     gl_FragColor = vec4(uShadowColor, alpha);

@@ -18,31 +18,39 @@ export const pageCurlConfig = {
 
   /** Resting affordance. `idle` shows with no pointer nearby, `hover` when the pointer is on the corner. */
   affordance: {
-    idleCurl: 21,
-    hoverCurl: 52,
+    idleCurl: 30,
+    hoverCurl: 58,
   },
 
   /**
    * Shape of the fold.
    *
-   * `theta` is the total angle the paper wraps through, and it also fixes how much of
-   * the sheet a given drag lifts, since `crease = radius * theta` and
+   * `theta` is the total angle the paper wraps through. It sets two things at once.
+   *
+   * How far the fold runs: `crease = radius * theta` with
    * `radius = distance / (theta - sin theta)`. At exactly pi the crease lands on the
-   * pointer; below pi the fold runs ahead of the pointer, above pi it lags behind. The
-   * range therefore sits just under to just over pi: a small drag reads as a soft
-   * dog-ear, a long one tightens toward a real crease.
+   * pointer, below pi it runs ahead, above pi it lags behind.
+   *
+   * And, more visibly, the proportion of the curl. Seen head-on the roll is exactly one
+   * radius wide, because the sheet reaches its furthest point past the crease a quarter
+   * turn in, while the strip of revealed page behind it is `radius * (theta - 1)`. So
+   * theta alone decides whether the corner reads as a fat roll of paper with a sliver of
+   * dark behind it, or as a dark wedge with a hairline of paper on its edge. Just over a
+   * quarter turn puts roughly three parts roll to two parts reveal, which is what a
+   * lifted poster corner actually looks like.
    */
   curl: {
-    thetaMin: 1.95,
+    thetaMin: 1.62,
     thetaMax: 3.32,
     /** Hard stop so the sheet can never spiral into itself. */
     maxAngle: Math.PI * 1.06,
     /**
-     * How much looser the curl gets away from the grabbed corner (0 = pure cylinder).
-     * Kept modest: a strong cone pushes the point where the sheet turns edge-on far
-     * enough off the fold axis that the tip stops reading as one continuous surface.
+     * How much wider the roll gets toward the ends of the crease (0 = pure cylinder).
+     * Real paper opens up where it runs off the edge of the sheet and stays tight at the
+     * pinned corner, and that taper is most of what separates a roll of paper from a
+     * rolled tube of plastic.
      */
-    cone: 0.3,
+    cone: 0.5,
     /** Span over which the cone term ramps in, as a fraction of the viewport diagonal. */
     coneSpan: 0.55,
     /** Downward droop of the lifted tip, in pixels at full turn. */
@@ -73,10 +81,25 @@ export const pageCurlConfig = {
   hoverSpring: { stiffness: 260, damping: 30 },
 
   shadow: {
-    /** Peak opacity of the shadow the flap casts onto the revealed page. */
+    /** Peak opacity of the shadow the roll casts onto the revealed page. */
     strength: 0.34,
     /** Base blur radius, grows with how far the paper has lifted. */
     spread: 14,
+    /**
+     * The roll also overhangs the untouched page just past the crease, and its shadow
+     * there is what makes the fold sit on the page rather than float in a hole. Scaled
+     * down from the reveal side, which is in shade rather than merely shadowed.
+     */
+    spill: 0.3,
+    /** How far that shadow reaches past the crease, before the lift-dependent part. */
+    spillReach: 30,
+    /**
+     * Distance over which the spill ramps up from the crease. The paper is tangent to
+     * the page at the crease and shaded identically, so anything but a gradual ramp here
+     * steps the page darker right where the two surfaces are supposed to meet
+     * seamlessly, and the fold grows a hard outline.
+     */
+    spillOnset: 16,
   },
 
   paper: {
@@ -103,9 +126,13 @@ export const pageCurlConfig = {
      * literal extrusion. This also softens the hand-off where the surface turns
      * edge-on and the printed side gives way to the reverse.
      */
-    edgeShade: 0.28,
-    /** How wide, in normal-to-view terms, the edge shading ramps over. */
-    edgeSpread: 0.55,
+    edgeShade: 0.34,
+    /**
+     * How wide, in normal-to-view terms, the edge shading ramps over. Generous, because
+     * this gradient is standing in for the sliver of the sheet's underside that a curl
+     * this open barely turns far enough to show.
+     */
+    edgeSpread: 0.7,
   },
 
   mesh: {

@@ -185,7 +185,7 @@ export function usePageCurl({
 
       // The corner steers toward the pointer as it comes closer, and relaxes back onto
       // the diagonal once the pointer leaves.
-      const fallback = defaultDirection(view);
+      const fallback = defaultDirection();
       const restAngle = Math.atan2(fallback.y, fallback.x);
       const toward = foldFromPointer(pointer.current, view);
       const pointerAngle =
