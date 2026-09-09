@@ -16,7 +16,14 @@ export function ItemIcon({ src, alt, className }: ItemIconProps) {
       alt={alt}
       width={68}
       height={68}
-      className={cn("size-[68px] shrink-0", className)}
+      className={cn(
+        "size-[68px] shrink-0 transition-[filter] duration-150",
+        // SVG fills are a fixed light grey (#C3C7CB). Darken on hover; keep muted in dark mode
+        // so they stay grey instead of reading as near-white on a dark background.
+        "hover:brightness-[0.72] group-hover:brightness-[0.72]",
+        "dark:brightness-[0.58] dark:hover:brightness-[0.45] dark:group-hover:brightness-[0.45]",
+        className,
+      )}
     />
   );
 }

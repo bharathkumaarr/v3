@@ -36,7 +36,7 @@ function CompanyLogo({ item }: { item: ExperienceItem }) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`${item.company} website`}
-      className="rounded-md transition-opacity hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-7"
+      className="group rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-7"
     >
       {icon}
     </Link>
