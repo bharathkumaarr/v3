@@ -191,7 +191,7 @@ export const shadowFragmentShader = /* glsl */ `
       // what seats the fold on the page. Ramped in over a few pixels so it meets the
       // revealed side at zero and the crease itself stays seamless.
       float past = -arc;
-      float reach = uSpillReach + lift * 0.35;
+      float reach = uSpillReach + lift * 0.16;
       alpha =
         uStrength * uSpill * contact *
         smoothstep(0.0, uSpillOnset, past) * exp(-past / max(reach, 1.0));

@@ -18,8 +18,8 @@ export const pageCurlConfig = {
 
   /** Resting affordance. `idle` shows with no pointer nearby, `hover` when the pointer is on the corner. */
   affordance: {
-    idleCurl: 30,
-    hoverCurl: 58,
+    idleCurl: 25,
+    hoverCurl: 50,
   },
 
   /**
@@ -91,8 +91,12 @@ export const pageCurlConfig = {
      * down from the reveal side, which is in shade rather than merely shadowed.
      */
     spill: 0.3,
-    /** How far that shadow reaches past the crease, before the lift-dependent part. */
-    spillReach: 30,
+    /**
+     * How far that shadow reaches past the crease, before the lift-dependent part. Kept
+     * tight: a shadow that reaches as far as the fold itself stops reading as contact and
+     * starts washing the whole corner out.
+     */
+    spillReach: 13,
     /**
      * Distance over which the spill ramps up from the crease. The paper is tangent to
      * the page at the crease and shaded identically, so anything but a gradual ramp here
@@ -107,7 +111,7 @@ export const pageCurlConfig = {
      * Ambient term; the rest comes from the key light. Kept high because paper this
      * pale has very little falloff before it starts reading as grey plastic.
      */
-    ambient: 0.82,
+    ambient: 0.74,
     /** Direction the key light comes from, in view space. */
     lightDirection: [-0.38, 0.66, 0.65] as const,
     /** Matte paper, so this stays very low. */
