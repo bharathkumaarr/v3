@@ -229,9 +229,13 @@ export class PaperRenderer {
         uRadius: { value: 0 },
         uStrength: { value: shadow.strength },
         uSpread: { value: shadow.spread },
+        uMaxSpread: { value: shadow.maxSpread },
         uSpill: { value: shadow.spill },
         uSpillReach: { value: shadow.spillReach },
+        uMaxSpillReach: { value: shadow.maxSpillReach },
         uSpillOnset: { value: shadow.spillOnset },
+        uMinContact: { value: shadow.minContact },
+        uContactFade: { value: shadow.contactFade },
         uShadowColor: { value: new Vector3(0.04, 0.06, 0.08) },
       },
     });

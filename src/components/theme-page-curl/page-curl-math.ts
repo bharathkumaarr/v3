@@ -93,6 +93,38 @@ export function defaultDirection(): Vec2 {
   return { x: -Math.SQRT1_2, y: Math.SQRT1_2 };
 }
 
+/**
+ * Wrap angle that lifts the corner `x` radii away from the crease.
+ *
+ * Inverts `theta - sin(theta) = x`, which has no closed form. The function is monotonic
+ * over the range we allow, so Newton converges in a handful of steps from the small-angle
+ * seed `cbrt(6x)`, taken from `theta - sin(theta) ~= theta^3 / 6`.
+ */
+function wrapAngle(x: number, maxAngle: number): number {
+  if (x <= 0) return 0;
+  if (x >= maxAngle - Math.sin(maxAngle)) return maxAngle;
+
+  let theta = Math.min(Math.cbrt(6 * x), maxAngle);
+
+  for (let i = 0; i < 8; i++) {
+    const slope = 1 - Math.cos(theta);
+    if (slope < 1e-6) break;
+
+    const next = theta - (theta - Math.sin(theta) - x) / slope;
+    if (!Number.isFinite(next)) break;
+
+    theta = clamp(next, 1e-4, maxAngle);
+  }
+
+  return theta;
+}
+
+/** Widest the roll is allowed to get, so it stays a band rather than a whole screen. */
+function maxRadius(viewport: Viewport): number {
+  const { radiusMaxPx, radiusMaxRatio } = pageCurlConfig.curl;
+  return Math.min(radiusMaxPx, viewport.diagonal * radiusMaxRatio);
+}
+
 export function solveFold(
   distance: number,
   dirX: number,
@@ -111,16 +143,29 @@ export function solveFold(
     };
   }
 
-  const { thetaMin, thetaMax } = pageCurlConfig.curl;
+  const { restWrap, maxAngle } = pageCurlConfig.curl;
   const span = sheetSpan(dirX, dirY, viewport) || viewport.diagonal || 1;
 
-  // Pre-estimate of progress. `creaseDistance` tracks `distance` closely, so using the
-  // raw drag length here avoids a circular dependency without a visible difference.
-  const ramp = smoothstep(0, 1, distance / span);
-  const theta = thetaMin + (thetaMax - thetaMin) * ramp;
+  // Pick the radius and let the wrap angle follow, rather than the other way round. The
+  // radius is the thing you actually see -- head-on, the roll is exactly one radius wide
+  // -- so driving the angle instead lets a long pull inflate the roll without limit
+  // until the curl stops being a roll of paper and becomes a gradient across the page.
+  //
+  // While the roll still has room it holds `restWrap`, which fixes its proportions: the
+  // strip of revealed page behind it is `radius * (restWrap - 1)`. Once it hits its
+  // ceiling it stops fattening and starts wrapping tighter instead, which is what a page
+  // actually does as it is turned.
+  const radius = Math.min(distance / (restWrap - Math.sin(restWrap)), maxRadius(viewport));
+  const theta = wrapAngle(distance / radius, maxAngle);
 
-  const radius = distance / (theta - Math.sin(theta));
-  const creaseDistance = radius * theta;
+  // Past the angle ceiling the roll cannot tighten any further, so the remaining lift is
+  // taken up by a straight flap leaving the roll along the tangent. Without this the tip
+  // would fall short of the pointer on a long drag.
+  const wrapped = radius * (theta - Math.sin(theta));
+  const tangent = 1 - Math.cos(theta);
+  const overshoot = tangent > 1e-6 ? Math.max(distance - wrapped, 0) / tangent : 0;
+
+  const creaseDistance = radius * theta + overshoot;
 
   return {
     dirX,
@@ -211,8 +256,13 @@ export function coversViewport(fold: FoldSolution, viewport: Viewport): boolean 
 /**
  * Drag distance at which the fold just covers the whole viewport.
  *
- * `creaseDistance` is close to proportional to `distance`, so a few fixed-point
- * iterations converge immediately. Called once per interaction, never per frame.
+ * `creaseDistance` is close to affine in `distance`, so fixed-point iteration converges
+ * quickly. Called once per interaction, never per frame.
+ *
+ * Note this is well beyond the viewport: once the roll stops fattening the crease
+ * advances at roughly half the rate of the pull, which is also true of turning a real
+ * page, where the corner travels about twice the width of the sheet. The committed turn
+ * is animated rather than dragged, so the pointer never has to get there.
  */
 export function distanceToCoverViewport(
   dirX: number,
@@ -223,7 +273,7 @@ export function distanceToCoverViewport(
   if (needed <= 0) return viewport.diagonal;
 
   let distance = needed;
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 10; i++) {
     const fold = solveFold(distance, dirX, dirY, viewport);
     const ratio = fold.creaseDistance / distance;
     if (!Number.isFinite(ratio) || ratio <= 0) break;

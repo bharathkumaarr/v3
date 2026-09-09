@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { grabZoneRadius, pageCurlConfig } from "./page-curl-config";
+import { affordanceCurl, grabZoneRadius, pageCurlConfig } from "./page-curl-config";
 import {
   clamp,
   coversViewport,
@@ -172,7 +172,6 @@ export function usePageCurl({
       distanceTarget.current = commitTarget.current;
       activeSpring.current = pageCurlConfig.commitSpring;
     } else {
-      const { idleCurl, hoverCurl } = pageCurlConfig.affordance;
       const radius = grabZoneRadius(view.width, view.height);
       const reach = pointer.current.seen
         ? Math.hypot(view.width - pointer.current.x, pointer.current.y)
@@ -180,7 +179,7 @@ export function usePageCurl({
       const proximity =
         1 - smoothstep(radius, radius + pageCurlConfig.hoverZone.padding, reach);
 
-      const resting = idleCurl + (hoverCurl - idleCurl) * proximity;
+      const resting = affordanceCurl(view.diagonal, proximity);
       distanceTarget.current = now < holdUntil.current ? 0 : resting;
 
       // The corner steers toward the pointer as it comes closer, and relaxes back onto

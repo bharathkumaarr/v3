@@ -16,34 +16,45 @@ export const pageCurlConfig = {
     padding: 120,
   },
 
-  /** Resting affordance. `idle` shows with no pointer nearby, `hover` when the pointer is on the corner. */
+  /**
+   * Resting affordance: how far the corner is lifted with no pointer nearby, and when the
+   * pointer is on it. Quoted for a laptop-sized window and scaled by viewport from there,
+   * so the dog-ear stays the same fraction of the page rather than eating a third of a
+   * phone screen.
+   */
   affordance: {
-    idleCurl: 25,
-    hoverCurl: 50,
+    idleCurl: 40,
+    hoverCurl: 70,
+    referenceDiagonal: 1160,
+    minScale: 0.72,
+    maxScale: 1.2,
   },
 
   /**
    * Shape of the fold.
    *
-   * `theta` is the total angle the paper wraps through. It sets two things at once.
-   *
-   * How far the fold runs: `crease = radius * theta` with
-   * `radius = distance / (theta - sin theta)`. At exactly pi the crease lands on the
-   * pointer, below pi it runs ahead, above pi it lags behind.
-   *
-   * And, more visibly, the proportion of the curl. Seen head-on the roll is exactly one
-   * radius wide, because the sheet reaches its furthest point past the crease a quarter
-   * turn in, while the strip of revealed page behind it is `radius * (theta - 1)`. So
-   * theta alone decides whether the corner reads as a fat roll of paper with a sliver of
-   * dark behind it, or as a dark wedge with a hairline of paper on its edge. Just over a
-   * quarter turn puts roughly three parts roll to two parts reveal, which is what a
-   * lifted poster corner actually looks like.
+   * Seen head-on the roll is exactly one radius wide, because the sheet reaches its
+   * furthest point past the crease a quarter turn in, while the strip of revealed page
+   * behind it is `radius * (wrap - 1)`. Those two numbers are the whole look of the
+   * curl, which is why the radius is chosen here and the wrap angle solved from it.
    */
   curl: {
-    thetaMin: 1.62,
-    thetaMax: 3.32,
+    /**
+     * Wrap angle the roll holds while it still has room to grow, which fixes its
+     * proportions. Just over a quarter turn puts about three parts roll to two parts
+     * revealed page, which is what a lifted poster corner looks like.
+     */
+    restWrap: 1.6,
+    /**
+     * Widest the roll gets, as an absolute size and as a share of the viewport diagonal.
+     * Past this it stops fattening and wraps tighter instead. Without a ceiling the roll
+     * grows in proportion to the pull, and a long drag ends up as one enormous soft
+     * gradient across the page rather than a sheet being turned.
+     */
+    radiusMaxPx: 150,
+    radiusMaxRatio: 0.115,
     /** Hard stop so the sheet can never spiral into itself. */
-    maxAngle: Math.PI * 1.06,
+    maxAngle: Math.PI * 1.15,
     /**
      * How much wider the roll gets toward the ends of the crease (0 = pure cylinder).
      * Real paper opens up where it runs off the edge of the sheet and stays tight at the
@@ -82,21 +93,32 @@ export const pageCurlConfig = {
 
   shadow: {
     /** Peak opacity of the shadow the roll casts onto the revealed page. */
-    strength: 0.34,
+    strength: 0.44,
     /** Base blur radius, grows with how far the paper has lifted. */
-    spread: 14,
+    spread: 16,
+    /** Ceiling on that blur, so a big roll softens its shadow without spreading it. */
+    maxSpread: 110,
     /**
      * The roll also overhangs the untouched page just past the crease, and its shadow
      * there is what makes the fold sit on the page rather than float in a hole. Scaled
      * down from the reveal side, which is in shade rather than merely shadowed.
      */
-    spill: 0.3,
+    spill: 0.5,
     /**
-     * How far that shadow reaches past the crease, before the lift-dependent part. Kept
-     * tight: a shadow that reaches as far as the fold itself stops reading as contact and
-     * starts washing the whole corner out.
+     * How far that shadow reaches past the crease, before the lift-dependent part, and
+     * its ceiling. Both kept tight: a shadow that reaches as far as the fold itself stops
+     * reading as contact and starts washing the site out behind it.
      */
-    spillReach: 13,
+    spillReach: 16,
+    maxSpillReach: 44,
+    /**
+     * Floor on the contact term, which fades as the paper separates from the page. Left
+     * unbounded the shadow all but disappears at the point in the drag where the roll is
+     * largest and most obviously needs to be sitting on something.
+     */
+    minContact: 0.55,
+    /** Lift at which the contact term reaches that floor. */
+    contactFade: 900,
     /**
      * Distance over which the spill ramps up from the crease. The paper is tangent to
      * the page at the crease and shaded identically, so anything but a gradual ramp here
@@ -164,4 +186,14 @@ export type PageCurlConfig = typeof pageCurlConfig;
 export function grabZoneRadius(width: number, height: number): number {
   const { min, max, viewportRatio } = pageCurlConfig.grabZone;
   return Math.min(max, Math.max(min, Math.min(width, height) * viewportRatio));
+}
+
+/** Resting lift of the corner, scaled to the viewport. */
+export function affordanceCurl(diagonal: number, proximity: number): number {
+  const { idleCurl, hoverCurl, referenceDiagonal, minScale, maxScale } =
+    pageCurlConfig.affordance;
+
+  const scale = Math.min(maxScale, Math.max(minScale, diagonal / referenceDiagonal));
+
+  return (idleCurl + (hoverCurl - idleCurl) * proximity) * scale;
 }
