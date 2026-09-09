@@ -20,6 +20,7 @@ export const siteConfig = {
 
 export type ExperienceItem = {
   company: string;
+  href?: string;
   startYear: string;
   endYear?: string;
   present?: boolean;
@@ -39,6 +40,7 @@ export type ProjectItem = {
 export const experience: ExperienceItem[] = [
   {
     company: "OneAssure",
+    href: "https://oneassure.in",
     startYear: "2025",
     present: true,
     industry: "insurtech",
@@ -49,6 +51,7 @@ export const experience: ExperienceItem[] = [
   },
   {
     company: "Vipernetwork",
+    href: "https://vipernet.xyz",
     startYear: "2024",
     endYear: "2025",
     industry: "web3 infrastructure",
@@ -59,6 +62,7 @@ export const experience: ExperienceItem[] = [
   },
   {
     company: "Superteam",
+    href: "https://superteam.fun",
     startYear: "2023",
     present: true,
     industry: "web3",
