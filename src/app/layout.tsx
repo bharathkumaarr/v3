@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
-import { PagePeelShell } from "@/components/page-peel/page-peel-shell";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -35,9 +34,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full bg-neutral-1 text-neutral-8">
-        <ThemeProvider>
-          <PagePeelShell>{children}</PagePeelShell>
-        </ThemeProvider>
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );
