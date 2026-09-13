@@ -63,6 +63,7 @@ body {
 }
 
 ::selection {
-  background-color: var(--neutral-3);
+  /* Lighter than neutral-3 so selected text matches frederic.ooo’s softer wash */
+  background-color: var(--neutral-2);
   color: var(--neutral-8);
 }

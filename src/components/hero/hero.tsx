@@ -7,16 +7,15 @@ export function Hero() {
 
   return (
     <>
-      <ContentRow>
-        <h1 className="text-pretty text-4xl lowercase tracking-tighter text-neutral-8">
-          i&apos;m{" "}
+      {/* Full-bleed in the page grid; U+2019 apostrophe matches frederic.ooo. */}
+      <h1 className="col-span-full text-[min(2.25rem,calc((100vw-2rem)*0.058))] lowercase tracking-tighter text-neutral-8">
+        <span className="block whitespace-nowrap">
+          i{"\u2019"}m{" "}
           <span className="font-semibold">{hero.headline}</span>, {hero.role}
-          <br />
-          {hero.taglineLine2}
-          <br />
-          {hero.taglineLine3}
-        </h1>
-      </ContentRow>
+        </span>
+        <span className="block">{hero.taglineLine2}</span>
+        <span className="block">{hero.taglineLine3}</span>
+      </h1>
 
       <ContentRow
         sidebar={

@@ -78,24 +78,24 @@ export const experience: ExperienceItem[] = [
 ];
 
 export const projects: ProjectItem[] = [
+  // {
+  //   title: "Inploi SDK",
+  //   description:
+  //     "the official sdk for inploi. 8 packages and counting, with a core plus light ways to drop chatbot, job search, job alerts, and friends onto any site.",
+  //   href: "https://www.npmjs.com/package/@inploi/sdk",
+  //   icon: "/icons/project-1.svg",
+  // },
+  // {
+  //   title: "Inploi Dashboard",
+  //   description:
+  //     "customer-facing dashboard on remix, playing bff with the laravel api behind inploi.",
+  //   icon: "/icons/project-2.svg",
+  // },
   {
-    title: "Inploi SDK",
+    title: "shipyard",
     description:
-      "the official sdk for inploi. 8 packages and counting, with a core plus light ways to drop chatbot, job search, job alerts, and friends onto any site.",
-    href: "https://www.npmjs.com/package/@inploi/sdk",
-    icon: "/icons/project-1.svg",
-  },
-  {
-    title: "Inploi Dashboard",
-    description:
-      "customer-facing dashboard on remix, playing bff with the laravel api behind inploi.",
-    icon: "/icons/project-2.svg",
-  },
-  {
-    title: "Winden UI",
-    description:
-      "internal design system with about 50 components. react, styled with vanilla extract.",
-    href: "https://vite-and-design-system-ui-docs.vercel.app/",
+      "a deployment platform that automates, coordinates, and reliably recovers application deployments across environments. Its durable execution and idempotent operations reduced deployment recovery time by 68%",
+    href: "",
     icon: "/icons/project-3.svg",
   },
 ];

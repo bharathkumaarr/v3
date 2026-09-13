@@ -12,7 +12,7 @@
 const HEIGHT = 32;
 const RADIUS = 16;
 /** Half-width of the concave notch that joins two bubbles. */
-const NOTCH = 10.5;
+const NOTCH = 12;
 /**
  * Advance widths at 12px Innovator Grotesk Regular (matches `text-xs` + frederic.ooo).
  * Tuned so each bubble hugs its letters the way a CSS pill with `px-2.5` would, instead
@@ -30,7 +30,8 @@ const CHAR_ADVANCE: Record<string, number> = {
   w: 9.46,
   " ": 2.88,
 };
-const SEGMENT_PAD = 18;
+/** Horizontal padding inside each bubble; a bit roomier so labels don’t crowd the notches. */
+const SEGMENT_PAD = 26;
 
 export type PillSegment = {
   label: string;
@@ -121,7 +122,7 @@ function notch(
   // Cubic approximation of a circular bite, matching the frederic.ooo notch so the
   // chain still reads as part of the same visual language.
   const yEdge = side === "top" ? 0.5 : HEIGHT - 0.5;
-  const yPinch = side === "top" ? 10.5 : HEIGHT - 10.5;
+  const yPinch = side === "top" ? NOTCH : HEIGHT - NOTCH;
   const yMid = side === "top" ? 3.64 : HEIGHT - 3.64;
 
   const left = joint - NOTCH;
