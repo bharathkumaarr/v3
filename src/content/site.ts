@@ -102,5 +102,6 @@ export const projects: ProjectItem[] = [
     description:
       "a multi tenant conversational ai platform enabling users to configure custom prompt driven agents with persistent, multi turn chat sessions.",
     icon: "/icons/convo.svg",
+    href: "https://convo-sigma.vercel.app/"
   },
 ];
