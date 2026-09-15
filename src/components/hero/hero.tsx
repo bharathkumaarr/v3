@@ -7,9 +7,13 @@ export function Hero() {
 
   return (
     <>
-      <ContentRow>
-        <h1 className="text-4xl lowercase tracking-tighter text-neutral-8">
-          <span className="block">
+      <ContentRow contentClassName="@container">
+        {/*
+          Scale with the content column (not full-bleed) so line 1 stays on one row
+          while the heading stays left-aligned with the rest of the page grid.
+        */}
+        <h1 className="text-[min(2.25rem,5.85cqi)] lowercase tracking-tighter text-neutral-8">
+          <span className="block whitespace-nowrap">
             i{"\u2019"}m{" "}
             <span className="font-semibold">{hero.headline}</span>, {hero.role}
           </span>
