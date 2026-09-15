@@ -12,13 +12,15 @@ export function Hero() {
           Scale with the content column (not full-bleed) so line 1 stays on one row
           while the heading stays left-aligned with the rest of the page grid.
         */}
-        <h1 className="text-[min(2.25rem,5.85cqi)] lowercase tracking-tighter text-neutral-8">
-          <span className="block whitespace-nowrap">
+        <h1 className="text-[min(2.25rem,5.85cqi)] leading-[1.11] text-balance lowercase tracking-tighter text-neutral-8">
+          <span className="whitespace-nowrap">
             i{"\u2019"}m{" "}
             <span className="font-semibold">{hero.headline}</span>, {hero.role}
           </span>
-          <span className="block">{hero.taglineLine2}</span>
-          <span className="block">{hero.taglineLine3}</span>
+          <br />
+          {hero.taglineLine2}
+          <br />
+          {hero.taglineLine3}
         </h1>
       </ContentRow>
 
