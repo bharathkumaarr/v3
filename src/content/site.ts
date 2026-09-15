@@ -94,8 +94,13 @@ export const projects: ProjectItem[] = [
   {
     title: "shipyard",
     description:
-      "a deployment platform that automates, coordinates, and reliably recovers application deployments across environments. Its durable execution and idempotent operations reduced deployment recovery time by 68%",
-    href: "",
-    icon: "/icons/project-3.svg",
+      "a deployment platform that automates, coordinates, and reliably recovers application deployments across environments. its durable execution and idempotent operations reduced deployment recovery time by 68%.",
+    icon: "/icons/shipyard.svg",
+  },
+  {
+    title: "convo",
+    description:
+      "a multi tenant conversational ai platform enabling users to configure custom prompt driven agents with persistent, multi turn chat sessions.",
+    icon: "/icons/convo.svg",
   },
 ];
