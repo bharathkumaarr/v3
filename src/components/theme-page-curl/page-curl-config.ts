@@ -6,14 +6,14 @@
 export const pageCurlConfig = {
   /** Radius around the top-right corner that accepts a press, clamped by viewport size. */
   grabZone: {
-    min: 82,
-    max: 138,
-    viewportRatio: 0.11,
+    min: 108,
+    max: 172,
+    viewportRatio: 0.14,
   },
 
   /** Extra radius beyond the grab zone where the corner starts lifting on approach. */
   hoverZone: {
-    padding: 120,
+    padding: 140,
   },
 
   /**
@@ -23,11 +23,11 @@ export const pageCurlConfig = {
    * phone screen.
    */
   affordance: {
-    idleCurl: 48,
-    hoverCurl: 78,
+    idleCurl: 128,
+    hoverCurl: 182,
     referenceDiagonal: 1160,
     minScale: 0.72,
-    maxScale: 1.2,
+    maxScale: 1.28,
   },
 
   /**
@@ -54,8 +54,8 @@ export const pageCurlConfig = {
      * Widest the roll gets. Kept tight on purpose: beyond this the flap stops looking
      * like a page edge and becomes a featureless slab covering the site.
      */
-    radiusMaxPx: 58,
-    radiusMaxRatio: 0.055,
+    radiusMaxPx: 68,
+    radiusMaxRatio: 0.062,
     /** Hard stop so the sheet can never spiral into itself. */
     maxAngle: Math.PI * 1.15,
     /**
