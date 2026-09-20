@@ -267,8 +267,8 @@ export function ThemePageCurl({ children }: { children: ReactNode }) {
             ref={grabRef}
             className="fixed top-0 right-0 z-30 touch-none select-none"
             style={{
-              width: grabRadius,
-              height: grabRadius,
+              width: grabRadius+50,
+              height: grabRadius+50,
               cursor: interactive ? "grab" : "pointer",
             }}
             onClick={handleFallbackPointer}
