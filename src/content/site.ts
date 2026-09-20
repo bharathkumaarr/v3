@@ -104,4 +104,10 @@ export const projects: ProjectItem[] = [
     icon: "/icons/convo.svg",
     href: "https://convo-sigma.vercel.app/"
   },
+  {
+    title: "traceRAG",
+    description:
+      "a source grounded document intelligence platform that turns complex PDFs into structured, verifiable insights. It combines hybrid search, LLM powered extraction, and deterministic citation verification to ensure every AI generated claim can be traced back to its original source.",
+    icon: "/icons/convo.svg"
+  },
 ];
