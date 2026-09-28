@@ -66,9 +66,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Justify aligned text for all content divs and paragraphs */
-main p,
-main div,
+/* Justify aligned text for elements explicitly opting into justified layout */
 .text-justify {
   text-align: justify;
   text-justify: inter-word;

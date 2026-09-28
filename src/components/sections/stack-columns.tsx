@@ -83,7 +83,7 @@ export function StackColumns() {
       </div>
 
       {/* Column 2: Selected Projects */}
-      <div className="w-full sm:w-[192px]">
+      <div className="w-full sm:w-[192px] text-left">
         <ColumnHeader href="/projects" title="projects" />
         <div className="space-y-6">
           {projects.map((item) => (
@@ -139,7 +139,7 @@ export function StackColumns() {
       </div>
 
       {/* Column 3: writing */}
-      <div className="w-full sm:w-[192px]">
+      <div className="w-full sm:w-[192px] text-left">
         <ColumnHeader href="/writing" title="writing" />
         <div className="space-y-6">
           {featuredWriting.map((item) => (
