@@ -19,13 +19,13 @@ function ColumnHeader({ href, title, badge }: ColumnHeaderProps) {
     <h2 className="text-[14px] font-normal leading-[20px] text-neutral-6 mb-6">
       <Link
         href={href}
-        className="group inline-flex items-center text-neutral-6 hover:text-neutral-8 hover:transition-colors hover:duration-150"
+        className="group inline-flex items-baseline text-neutral-6 hover:text-neutral-8 hover:transition-colors hover:duration-150"
       >
         <span style={{ viewTransitionName: `page-title-${title}` }}>
           {title}
         </span>
         {badge && (
-          <span className="ml-2 inline-flex items-center justify-center h-[18px] leading-none text-[11px] text-neutral-6 font-mono border border-neutral-4/60 dark:border-neutral-4 px-1.5 rounded select-none whitespace-nowrap -translate-y-px group-hover:text-neutral-8 group-hover:border-neutral-5 transition-colors duration-150">
+          <span className="ml-2 inline-flex items-center text-[11px] leading-none text-neutral-6 font-mono border border-neutral-4/60 dark:border-neutral-4 px-1.5 py-[2.5px] rounded select-none whitespace-nowrap group-hover:text-neutral-8 group-hover:border-neutral-5 transition-colors duration-150">
             {badge}
           </span>
         )}
