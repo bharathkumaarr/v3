@@ -11,7 +11,7 @@ import { FormattedText } from "@/components/ui/formatted-text";
 type ColumnHeaderProps = {
   href: string;
   title: string;
-  badge: string;
+  badge?: string;
 };
 
 function ColumnHeader({ href, title, badge }: ColumnHeaderProps) {
@@ -27,9 +27,11 @@ function ColumnHeader({ href, title, badge }: ColumnHeaderProps) {
           </span>
           <span>{title}</span>
         </span>
-        <span className="ml-2 text-[11px] leading-tight text-neutral-6 font-mono border border-neutral-4/60 dark:border-neutral-4 px-1.5 py-0.5 rounded select-none whitespace-nowrap group-hover:text-neutral-8 group-hover:border-neutral-5 transition-colors duration-150">
-          {badge}
-        </span>
+        {badge && (
+          <span className="ml-2 text-[11px] leading-tight text-neutral-6 font-mono border border-neutral-4/60 dark:border-neutral-4 px-1.5 py-0.5 rounded select-none whitespace-nowrap group-hover:text-neutral-8 group-hover:border-neutral-5 transition-colors duration-150">
+            {badge}
+          </span>
+        )}
       </Link>
     </h2>
   );
@@ -82,7 +84,7 @@ export function StackColumns() {
 
       {/* Column 2: Selected Projects */}
       <div className="w-full sm:w-[192px]">
-        <ColumnHeader href="/projects" title="projects" badge="view all" />
+        <ColumnHeader href="/projects" title="projects" />
         <div className="space-y-6">
           {projects.map((item) => (
             <div key={item.title} className="min-h-[84px] text-justify">
@@ -138,7 +140,7 @@ export function StackColumns() {
 
       {/* Column 3: writing */}
       <div className="w-full sm:w-[192px]">
-        <ColumnHeader href="/writing" title="writing" badge="view all" />
+        <ColumnHeader href="/writing" title="writing" />
         <div className="space-y-6">
           {featuredWriting.map((item) => (
             <div key={item.title} className="min-h-[84px] text-justify">
