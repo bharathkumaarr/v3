@@ -25,7 +25,7 @@ function ColumnHeader({ href, title, badge }: ColumnHeaderProps) {
           {title}
         </span>
         {badge && (
-          <span className="ml-2 text-[11px] leading-tight text-neutral-6 font-mono border border-neutral-4/60 dark:border-neutral-4 px-1.5 py-0.5 rounded select-none whitespace-nowrap group-hover:text-neutral-8 group-hover:border-neutral-5 transition-colors duration-150">
+          <span className="ml-2 inline-flex items-center justify-center h-[18px] leading-none text-[11px] text-neutral-6 font-mono border border-neutral-4/60 dark:border-neutral-4 px-1.5 rounded select-none whitespace-nowrap -translate-y-px group-hover:text-neutral-8 group-hover:border-neutral-5 transition-colors duration-150">
             {badge}
           </span>
         )}
@@ -81,7 +81,11 @@ export function StackColumns() {
 
       {/* Column 2: Selected Projects */}
       <div className="w-full sm:w-[192px] text-left">
-        <ColumnHeader href="/projects" title="projects" />
+        <ColumnHeader
+          href="/projects"
+          title="projects"
+          badge="more details"
+        />
         <div className="space-y-6">
           {projects.map((item) => (
             <div key={item.title} className="min-h-[84px]">
