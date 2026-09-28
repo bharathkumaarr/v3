@@ -1,40 +1,30 @@
 import { siteConfig } from "@/content/site";
-import { ContentRow } from "@/components/layout/content-row";
-import { SkillTags } from "@/components/hero/skill-tags";
 
 export function Hero() {
-  const { hero } = siteConfig;
+  const { name, intro } = siteConfig;
 
   return (
-    <>
-      <ContentRow contentClassName="@container">
-        {/*
-          Scale with the content column (not full-bleed) so line 1 stays on one row
-          while the heading stays left-aligned with the rest of the page grid.
-        */}
-        <h1 className="text-[min(2.25rem,5.85cqi)] leading-[1.11] text-balance lowercase tracking-tighter text-neutral-8">
-          <span className="whitespace-nowrap">
-            i{"\u2019"}m{" "}
-            <span className="font-semibold">{hero.headline}</span>, {hero.role}
-          </span>
-          <br />
-          {hero.taglineLine2}
-          <br />
-          {hero.taglineLine3}
-        </h1>
-      </ContentRow>
+    <header className="mb-14">
+      <h1 className="text-[16px] font-medium leading-[28px] text-neutral-8 mb-7">
+        {name}
+      </h1>
 
-      <ContentRow
-        sidebar={
-          <p className="mt-8 text-md lowercase text-neutral-8">*</p>
-        }
-        contentClassName="mt-8"
-      >
-        <p className="text-pretty text-sm lowercase text-neutral-7">
-          {hero.footnote}
-        </p>
-        <SkillTags tags={hero.tags} />
-      </ContentRow>
-    </>
+      <p className="text-[16px] leading-[28px] text-neutral-8 mb-7 text-justify [text-align-last:left]">
+        <em>{intro.leadItalic}</em> {intro.bio}
+      </p>
+
+      <p className="text-[16px] leading-[28px] text-neutral-8 mb-7 text-justify [text-align-last:left]">
+        currently working fullstack at{" "}
+        <a
+          href="https://oneassure.in"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline decoration-1 underline-offset-[3px] decoration-neutral-4 hover:decoration-neutral-8 text-neutral-8 hover:transition-[text-decoration-color] hover:duration-150"
+        >
+          oneassure
+        </a>{" "}
+        building the core saas platform.
+      </p>
+    </header>
   );
 }
