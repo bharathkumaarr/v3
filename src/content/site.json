@@ -8,15 +8,21 @@
     "current": "currently working fullstack at oneassure building the core saas platform."
   },
   "now": {
-    "paragraph1": "developing skill through doing, guiltlessly exploring passion and systems engineering, imbuing quality. mindful that *everything around me is someone’s life work.*",
+    "paragraph1": "developing skill through doing, guiltlessly exploring passion and systems engineering, imbuing quality. obsessed with *understanding how things work from first principles and building software that lasts.*",
     "paragraph2": "all i want to do is build software. systems design, infrastructure, web performance, elegant interfaces. the web is an endless medium of opportunity and creativity."
   },
   "contact": [
     {
-      "label": "github",
-      "href": "https://github.com/bharathkumaarr",
-      "handle": "@bharathkumaarr",
-      "description": "code, experiments, and open-source systems."
+      "label": "email",
+      "href": "mailto:reddybharathkumar.m@gmail.com",
+      "handle": "reddybharathkumar.m@gmail.com",
+      "description": "direct inquiries and conversations."
+    },
+    {
+      "label": "x",
+      "href": "https://x.com/bharathkumarr",
+      "handle": "@bharathkumarr",
+      "description": "thoughts, updates, and discussions."
     },
     {
       "label": "linkedin",
