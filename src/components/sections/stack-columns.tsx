@@ -19,13 +19,13 @@ function ColumnHeader({ href, title, badge }: ColumnHeaderProps) {
     <h2 className="text-[14px] font-normal leading-[20px] text-neutral-6 mb-6">
       <Link
         href={href}
-        className="group inline-flex items-baseline text-neutral-6 hover:text-neutral-8 hover:transition-colors hover:duration-150"
+        className="group inline-flex items-baseline text-neutral-6 hover:text-neutral-8 transition-colors duration-150"
       >
         <span style={{ viewTransitionName: `page-title-${title}` }}>
           {title}
         </span>
         {badge && (
-          <span className="ml-2 inline-flex items-center text-[11px] leading-none text-neutral-6 font-mono border border-neutral-4/60 dark:border-neutral-4 px-1.5 py-[2.5px] rounded select-none whitespace-nowrap group-hover:text-neutral-8 group-hover:border-neutral-5 transition-colors duration-150">
+          <span className="ml-2 inline-flex items-center text-[11px] leading-none font-mono border border-neutral-4/60 dark:border-neutral-4 px-1.5 py-[2.5px] rounded select-none whitespace-nowrap">
             {badge}
           </span>
         )}
@@ -61,7 +61,7 @@ export function StackColumns() {
                     href={item.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[16px] leading-[24px] text-neutral-8 underline decoration-1 underline-offset-[3px] decoration-neutral-4 hover:decoration-neutral-8 hover:transition-[text-decoration-color] hover:duration-150"
+                    className="text-[16px] leading-[24px] text-neutral-8 underline decoration-1 underline-offset-[3px] decoration-neutral-4 hover:decoration-neutral-8 transition-[text-decoration-color] duration-150"
                   >
                     {item.company}
                   </a>
@@ -97,10 +97,10 @@ export function StackColumns() {
                     rel="noopener noreferrer"
                     className="group inline-flex items-center text-[16px] leading-[24px] text-neutral-8"
                   >
-                    <span className="underline decoration-1 underline-offset-[3px] decoration-neutral-4 group-hover:decoration-neutral-8 group-hover:transition-[text-decoration-color] group-hover:duration-150">
+                    <span className="underline decoration-1 underline-offset-[3px] decoration-neutral-4 group-hover:decoration-neutral-8 transition-[text-decoration-color] duration-150">
                       {item.title}
                     </span>
-                    <span className="text-[13px] text-neutral-6 ml-1 select-none no-underline inline-block group-hover:transition-transform group-hover:duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                    <span className="text-[13px] text-neutral-6 ml-1 select-none no-underline inline-block transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
                       ↗
                     </span>
                   </a>
@@ -125,12 +125,12 @@ export function StackColumns() {
             <div className="pt-2">
               <Link
                 href="/projects"
-                className="group inline-flex items-center text-[13px] font-mono text-neutral-6 hover:text-neutral-8 hover:transition-colors hover:duration-150"
+                className="group inline-flex items-center text-[13px] font-mono text-neutral-6 hover:text-neutral-8 transition-colors duration-150"
               >
-                <span className="underline decoration-1 underline-offset-[3px] decoration-neutral-4/60 group-hover:decoration-neutral-8 group-hover:transition-[text-decoration-color] group-hover:duration-150">
+                <span className="underline decoration-1 underline-offset-[3px] decoration-neutral-4/60 group-hover:decoration-neutral-8 transition-[text-decoration-color] duration-150">
                   +{remainingProjects} more
                 </span>
-                <span className="ml-1 text-[11px] select-none no-underline inline-block group-hover:transition-transform group-hover:duration-150 group-hover:translate-x-0.5">
+                <span className="ml-1 text-[11px] select-none no-underline inline-block transition-transform duration-150 group-hover:translate-x-0.5">
                   →
                 </span>
               </Link>
@@ -148,7 +148,7 @@ export function StackColumns() {
               <div className="flex items-center">
                 <a
                   href={item.href || "#"}
-                  className="text-[16px] leading-[24px] text-neutral-8 underline decoration-1 underline-offset-[3px] decoration-neutral-4 hover:decoration-neutral-8 hover:transition-[text-decoration-color] hover:duration-150"
+                  className="text-[16px] leading-[24px] text-neutral-8 underline decoration-1 underline-offset-[3px] decoration-neutral-4 hover:decoration-neutral-8 transition-[text-decoration-color] duration-150"
                 >
                   {item.title}
                 </a>
@@ -169,12 +169,12 @@ export function StackColumns() {
             <div className="pt-2">
               <Link
                 href="/writing"
-                className="group inline-flex items-center text-[13px] font-mono text-neutral-6 hover:text-neutral-8 hover:transition-colors hover:duration-150"
+                className="group inline-flex items-center text-[13px] font-mono text-neutral-6 hover:text-neutral-8 transition-colors duration-150"
               >
-                <span className="underline decoration-1 underline-offset-[3px] decoration-neutral-4/60 group-hover:decoration-neutral-8 group-hover:transition-[text-decoration-color] group-hover:duration-150">
+                <span className="underline decoration-1 underline-offset-[3px] decoration-neutral-4/60 group-hover:decoration-neutral-8 transition-[text-decoration-color] duration-150">
                   +{remainingWriting} more
                 </span>
-                <span className="ml-1 text-[11px] select-none no-underline inline-block group-hover:transition-transform group-hover:duration-150 group-hover:translate-x-0.5">
+                <span className="ml-1 text-[11px] select-none no-underline inline-block transition-transform duration-150 group-hover:translate-x-0.5">
                   →
                 </span>
               </Link>
