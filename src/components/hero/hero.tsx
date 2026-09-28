@@ -1,12 +1,17 @@
 import { siteConfig } from "@/content/site";
 
 export function Hero() {
-  const { name, intro } = siteConfig;
+  const { name, role, intro } = siteConfig;
 
   return (
     <header className="mb-14">
-      <h1 className="text-[16px] font-medium leading-[28px] text-neutral-8 mb-7">
-        {name}
+      <h1 className="text-[16px] font-medium leading-[28px] text-neutral-8 mb-7 flex items-baseline gap-2">
+        <span>{name}</span>
+        {role && (
+          <span className="font-normal text-[12px] text-neutral-6">
+            / {role}
+          </span>
+        )}
       </h1>
 
       <p className="text-[16px] leading-[28px] text-neutral-8 mb-7 text-justify [text-align-last:left]">
