@@ -11,6 +11,14 @@
         "featured": true
       },
       {
+        "title": "trackmail",
+        "description": "*stealth email tracking for gmail*. chrome extension providing real-time open detection, read timestamps, and follow-up alerts directly inside the inbox with zero clutter.",
+        "date": "08/08",
+        "href": "https://trackmail-six.vercel.app/",
+        "icon": "/icons/shipyard.svg",
+        "featured": true
+      },
+      {
         "title": "tracerag",
         "description": "*grounded document intelligence*. turns complex pdfs into structured, verifiable insights. combines hybrid search, llm extraction, and deterministic citation verification to ensure ai claims trace back to source.",
         "date": "15/06",
@@ -30,6 +38,27 @@
         "href": "https://convo-sigma.vercel.app/",
         "icon": "/icons/convo.svg",
         "featured": true
+      },
+      {
+        "title": "ditto",
+        "description": "*dynamic intent-driven interface generator*. transforms natural language prompts into live, interactive user interfaces and tailored components on the fly.",
+        "date": "28/08",
+        "href": "https://ditto-theta.vercel.app/",
+        "featured": false
+      },
+      {
+        "title": "texty",
+        "description": "*ephemeral instant chat rooms*. generate a unique room code, share it, and chat with zero sign-ups; rooms automatically vanish when everyone leaves.",
+        "date": "14/05",
+        "href": "https://usetexty.vercel.app/",
+        "featured": false
+      },
+      {
+        "title": "polymarket-bot",
+        "description": "*unusual bet alert bot for polymarket*. monitors prediction market trades and flags high-conviction or anomalous bets from low-activity wallets via telegram alerts.",
+        "date": "19/02",
+        "href": "https://github.com/bharathkumaarr/polymarketBot",
+        "featured": false
       }
     ]
   },
