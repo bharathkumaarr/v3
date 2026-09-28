@@ -55,27 +55,29 @@ export function Footer() {
 
   return (
     <footer
-      className="w-full border-t border-neutral-3 bg-neutral-1 text-neutral-6 text-[13px]"
+      className="w-full bg-neutral-1 text-neutral-6 text-[13px]"
       style={{ viewTransitionName: "site-footer" }}
     >
-      <div className="mx-auto max-w-[640px] px-6 sm:px-0 py-5 flex flex-col gap-2">
-        {/* Row 1: Statement on left, Latest update and Analog Clock on right */}
-        <div className="flex flex-wrap items-center justify-between gap-y-1 gap-x-3">
-          <span>&ldquo;harmony demands both order and surrender&rdquo;</span>
-          <div className="flex items-center gap-2.5">
-            <span className="font-mono text-[12px] sm:text-[13px] tabular-nums">
-              {`latest update: ${deployDate}`}
-            </span>
-            <AnalogClock date={now} />
+      <div className="mx-auto max-w-[640px] px-6 sm:px-0">
+        <div className="border-t border-neutral-3 py-5 flex flex-col gap-2">
+          {/* Row 1: Statement on left, Latest update and Analog Clock on right */}
+          <div className="flex flex-wrap items-center justify-between gap-y-1 gap-x-3">
+            <span>&ldquo;harmony demands both order and surrender&rdquo;</span>
+            <div className="flex items-center gap-2.5">
+              <span className="font-mono text-[12px] sm:text-[13px] tabular-nums">
+                {`latest update: ${deployDate}`}
+              </span>
+              <AnalogClock date={now} />
+            </div>
           </div>
-        </div>
 
-        {/* Row 2: Location on left, Live IST & UTC times with seconds on right */}
-        <div className="flex items-center justify-between text-[12px] sm:text-[13px]">
-          <span>bangalore, india</span>
-          <span className="font-mono tabular-nums">
-            {istTime} ist · {utcTime} utc
-          </span>
+          {/* Row 2: Location on left, Live IST & UTC times with seconds on right */}
+          <div className="flex items-center justify-between text-[12px] sm:text-[13px]">
+            <span>bangalore, india</span>
+            <span className="font-mono tabular-nums">
+              {istTime} ist · {utcTime} utc
+            </span>
+          </div>
         </div>
       </div>
     </footer>
