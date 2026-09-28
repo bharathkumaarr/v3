@@ -34,7 +34,7 @@ export function NowSection() {
           href={emailContact?.href || "mailto:reddybharathkumar.m@gmail.com"}
           className="underline decoration-1 underline-offset-[3px] decoration-neutral-4 hover:decoration-neutral-8 text-neutral-8 hover:transition-[text-decoration-color] hover:duration-150"
         >
-          {emailContact?.handle || "reddybharathkumar.m@gmail.com"}
+          {emailContact?.handle || "email"}
         </a>
         , say hello at{" "}
         <a
