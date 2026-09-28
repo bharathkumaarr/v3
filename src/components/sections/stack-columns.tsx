@@ -2,19 +2,43 @@ import Link from "next/link";
 import { experience, projects } from "@/content/site";
 import { FormattedText } from "@/components/ui/formatted-text";
 
+type ColumnHeaderProps = {
+  href: string;
+  title: string;
+  badge: string;
+};
+
+function ColumnHeader({ href, title, badge }: ColumnHeaderProps) {
+  return (
+    <h2 className="text-[14px] font-normal leading-[20px] text-neutral-6 mb-6">
+      <Link
+        href={href}
+        className="group inline-flex items-center text-neutral-6 hover:text-neutral-8 hover:transition-colors hover:duration-150"
+      >
+        <span className="inline-flex items-center">
+          <span className="inline-block transition-all duration-150 ease-out group-hover:opacity-0 group-hover:translate-x-1.5 text-neutral-5">
+            /
+          </span>
+          <span>{title}</span>
+        </span>
+        <span className="ml-2 opacity-0 -translate-x-1.5 transition-all duration-150 delay-0 group-hover:opacity-100 group-hover:translate-x-0 group-hover:duration-200 group-hover:delay-100 ease-out text-[11px] leading-tight text-neutral-6 font-mono border border-neutral-4/60 dark:border-neutral-4 px-1.5 py-0.5 rounded select-none whitespace-nowrap">
+          {badge}
+        </span>
+      </Link>
+    </h2>
+  );
+}
+
 export function StackColumns() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-14">
-      {/* Column 1: experience (no arrow marks on links) */}
+      {/* Column 1: experience */}
       <div className="w-full sm:w-[192px]">
-        <h2 className="text-[14px] font-normal leading-[20px] text-neutral-6 mb-6">
-          <Link
-            href="/experience"
-            className="hover:text-neutral-8 hover:transition-colors hover:duration-150"
-          >
-            experience
-          </Link>
-        </h2>
+        <ColumnHeader
+          href="/experience"
+          title="experience"
+          badge="show more details"
+        />
         <div className="space-y-6">
           {experience.map((item) => (
             <div key={item.company} className="min-h-[84px] text-justify">
@@ -42,16 +66,9 @@ export function StackColumns() {
         </div>
       </div>
 
-      {/* Column 2: Selected Projects (keep arrow marks on links) */}
+      {/* Column 2: Selected Projects */}
       <div className="w-full sm:w-[192px]">
-        <h2 className="text-[14px] font-normal leading-[20px] text-neutral-6 mb-6">
-          <Link
-            href="/projects"
-            className="hover:text-neutral-8 hover:transition-colors hover:duration-150"
-          >
-            projects
-          </Link>
-        </h2>
+        <ColumnHeader href="/projects" title="projects" badge="view all" />
         <div className="space-y-6">
           {projects.map((item) => (
             <div key={item.title} className="min-h-[84px] text-justify">
@@ -89,16 +106,9 @@ export function StackColumns() {
         </div>
       </div>
 
-      {/* Column 3: writing (links to /writing) */}
+      {/* Column 3: writing */}
       <div className="w-full sm:w-[192px]">
-        <h2 className="text-[14px] font-normal leading-[20px] text-neutral-6 mb-6">
-          <Link
-            href="/writing"
-            className="hover:text-neutral-8 hover:transition-colors hover:duration-150"
-          >
-            writing
-          </Link>
-        </h2>
+        <ColumnHeader href="/writing" title="writing" badge="view all" />
       </div>
     </div>
   );
