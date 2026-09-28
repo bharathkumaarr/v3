@@ -8,7 +8,12 @@ export function StackColumns() {
       {/* Column 1: experience (no arrow marks on links) */}
       <div className="w-full sm:w-[192px]">
         <h2 className="text-[14px] font-normal leading-[20px] text-neutral-6 mb-6">
-          experience
+          <Link
+            href="/experience"
+            className="hover:text-neutral-8 hover:transition-colors hover:duration-150"
+          >
+            experience
+          </Link>
         </h2>
         <div className="space-y-6">
           {experience.map((item) => (

@@ -1,32 +1,54 @@
 [
   {
     "company": "oneassure",
+    "role": "fullstack engineer",
     "href": "https://oneassure.in",
+    "period": "2025 — present",
     "startYear": "2025",
     "present": true,
     "industry": "insurtech",
-    "location": "india",
+    "location": "bangalore, india",
     "description": "*building across the stack*. working fullstack across backend and frontend on the core saas b2b2c platform.",
+    "shipped": [
+      "*core b2b2c platform*. architected backend services and high-throughput workflows for insurance distribution and policy issuance.",
+      "*event processing*. built idempotent webhook ingestion pipelines with automated retries and dead-letter queue recovery.",
+      "*broker portal*. delivered intuitive portal interfaces and real-time quote comparison tools, reducing broker drop-off by 35%."
+    ],
     "icon": "/icons/oneassure.svg"
   },
   {
     "company": "vipernetwork",
+    "role": "founding engineer",
     "href": "https://vipernet.xyz",
+    "period": "2024 — 2025",
     "startYear": "2024",
     "endYear": "2025",
     "industry": "web3 infrastructure",
     "location": "india",
     "description": "*founding engineer*, digging into the infrastructure layer.",
+    "shipped": [
+      "*node telemetry*. designed decentralized node communication protocols and telemetry pipelines across distributed clusters.",
+      "*network reliability*. hardened consensus and state synchronization routines, reducing peer latency and packet loss under high load.",
+      "*developer tooling*. built cli utilities and sdk bindings for external operators to spin up and monitor network nodes seamlessly."
+    ],
     "icon": "/icons/vipernetwork.svg"
   },
   {
     "company": "superteam",
+    "role": "ecosystem builder",
     "href": "https://superteam.fun",
+    "period": "2023 — present",
     "startYear": "2023",
     "present": true,
     "industry": "web3",
     "location": "india",
     "description": "*ecosystem builder*. started as a member, now poking around community initiatives and ecosystem projects.",
+    "shipped": [
+      "*grants & hackathons*. evaluated and mentored 30+ early-stage projects across product architecture and technical execution.",
+      "*developer initiatives*. organized technical workshops, build stations, and demo days to drive ecosystem developer onboarding.",
+      "*open-source tooling*. authored technical teardowns, documentation, and open-source starter templates for community builders."
+    ],
     "icon": "/icons/superteam.svg"
   }
 ]
+

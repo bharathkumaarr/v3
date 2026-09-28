@@ -27,7 +27,7 @@ function formatDateRange(item: ExperienceItem) {
 }
 
 function CompanyLogo({ item }: { item: ExperienceItem }) {
-  const icon = <ItemIcon src={item.icon} alt={`${item.company}'s logo`} />;
+  const icon = <ItemIcon src={item.icon || "/icons/superteam.svg"} alt={`${item.company}'s logo`} />;
 
   if (!item.href) return icon;
 

@@ -7,6 +7,8 @@ export type SiteConfig = typeof siteData;
 
 export type ExperienceItem = {
   company: string;
+  role?: string;
+  period?: string;
   href?: string;
   startYear: string;
   endYear?: string;
@@ -14,7 +16,8 @@ export type ExperienceItem = {
   industry: string;
   location: string;
   description: string;
-  icon: string;
+  icon?: string;
+  shipped?: string[];
 };
 
 export type ProjectItem = {
