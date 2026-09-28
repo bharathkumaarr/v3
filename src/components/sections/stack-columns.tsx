@@ -56,18 +56,18 @@ export function StackColumns() {
                     href={item.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[16px] leading-[24px] text-neutral-8 underline decoration-1 underline-offset-[3px] decoration-neutral-4 hover:decoration-neutral-8 hover:transition-[text-decoration-color] hover:duration-150"
+                    className="group inline-flex items-center text-[16px] leading-[24px] text-neutral-8"
                   >
-                    {item.title}
+                    <span className="underline decoration-1 underline-offset-[3px] decoration-neutral-4 group-hover:decoration-neutral-8 group-hover:transition-[text-decoration-color] group-hover:duration-150">
+                      {item.title}
+                    </span>
+                    <span className="text-[13px] text-neutral-6 ml-1 select-none no-underline inline-block group-hover:transition-transform group-hover:duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                      ↗
+                    </span>
                   </a>
                 ) : (
                   <span className="text-[16px] leading-[24px] text-neutral-8">
                     {item.title}
-                  </span>
-                )}
-                {item.href && (
-                  <span className="text-[13px] text-neutral-6 ml-1 select-none">
-                    ↗
                   </span>
                 )}
               </div>
