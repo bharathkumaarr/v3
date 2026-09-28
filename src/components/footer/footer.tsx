@@ -65,7 +65,7 @@ export function Footer() {
             <span>&ldquo;harmony demands both order and surrender&rdquo;</span>
             <div className="flex items-center gap-2.5">
               <span className="font-mono text-[12px] sm:text-[13px] tabular-nums">
-                {`latest update: ${deployDate}`}
+                {`latest: ${deployDate}`}
               </span>
               <AnalogClock date={now} />
             </div>
