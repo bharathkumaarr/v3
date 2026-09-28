@@ -1,26 +1,27 @@
 @import "tailwindcss";
+@import "lenis/dist/lenis.css";
 
 :root,
 .light {
-  --neutral-1: #ffffff;
-  --neutral-2: #f0f2f5;
-  --neutral-3: #e9edef;
-  --neutral-4: #d9dbdf;
-  --neutral-6: #697680;
-  --neutral-7: #54656f;
-  --neutral-8: #131b20;
+  --neutral-1: #f2f2f2;
+  --neutral-2: #e8e8e8;
+  --neutral-3: #dedede;
+  --neutral-4: #cccccc;
+  --neutral-6: #737373;
+  --neutral-7: #404040;
+  --neutral-8: #1a1a1a;
   --background: var(--neutral-1);
   --foreground: var(--neutral-8);
 }
 
 .dark {
-  --neutral-1: #0c0f12;
-  --neutral-2: #161b21;
-  --neutral-3: #1f262e;
-  --neutral-4: #2a333d;
-  --neutral-6: #8b9aab;
-  --neutral-7: #a8b4be;
-  --neutral-8: #f0f2f5;
+  --neutral-1: #1a1a1a;
+  --neutral-2: #242424;
+  --neutral-3: #2e2e2e;
+  --neutral-4: #3e3e3e;
+  --neutral-6: #8e8e8e;
+  --neutral-7: #a0a0a0;
+  --neutral-8: #f2f2f2;
   --background: var(--neutral-1);
   --foreground: var(--neutral-8);
 }
@@ -35,18 +36,18 @@
   --color-neutral-8: var(--neutral-8);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-innovator-grotesk), sans-serif;
+  --font-sans: var(--font-sohne), var(--font-inter), system-ui, -apple-system, sans-serif;
+  --font-serif: var(--font-newsreader), "Newsreader", "Times New Roman", Georgia, serif;
+  --font-display: var(--font-inter), system-ui, -apple-system, sans-serif;
   --font-mono:
     ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
     "Courier New", monospace;
-  /* Match frederic.ooo letter-spacing tokens */
   --tracking-tight: -0.01em;
   --tracking-tighter: -0.03em;
 }
 
 html {
-  scroll-behavior: smooth;
-  /* Keep scrolling, hide the gutter so the page curl sits flush with the window edge. */
+  /* Lenis drives smooth momentum scrolling; native scroll-behavior smooth is disabled to prevent fighting the RAF loop */
   scrollbar-width: none;
 }
 
@@ -58,12 +59,103 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 28px;
+  letter-spacing: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Justify aligned text for all content divs and paragraphs */
+main p,
+main div,
+.text-justify {
+  text-align: justify;
+  text-justify: inter-word;
+  text-align-last: left;
+}
+
+/* Editorial serif italic style signature to paco.me */
+em,
+i {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: calc(1em + 1px);
+  line-height: normal;
+}
+
 ::selection {
-  /* Lighter than neutral-3 so selected text matches frederic.ooo’s softer wash */
   background-color: var(--neutral-2);
   color: var(--neutral-8);
+}
+
+/* Paco.me style links */
+a.link-paco,
+.link-paco a {
+  text-decoration: underline 1px solid var(--neutral-4);
+  text-underline-offset: 3px;
+}
+
+a.link-paco:hover,
+.link-paco a:hover {
+  text-decoration-color: var(--neutral-8);
+  transition: text-decoration-color 0.15s ease;
+}
+
+/* Analog clock widget identical to paco.me */
+.paco-clock {
+  --seconds-deg: calc((var(--now-s, 0) / 60) * 360);
+  --minutes-deg: calc(((var(--now-m, 0) / 60) * 360) + ((var(--now-s, 0) / 60) * 6));
+  --hours-deg: calc(((var(--now-h, 0) / 12) * 360) + ((var(--now-m, 0) / 60) * 30));
+  --width: 1px;
+  --color: var(--neutral-7);
+  border: 1px solid var(--neutral-4);
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  position: relative;
+  transform: rotate(180deg);
+  flex-shrink: 0;
+}
+
+.paco-clock > * {
+  top: 50%;
+  left: calc(50% - var(--width) / 2);
+  width: var(--width);
+  height: var(--height);
+  background-color: var(--color);
+  border-radius: calc(var(--width) / 2);
+  transform-origin: 50% 0;
+  position: absolute;
+}
+
+.paco-clock::before {
+  content: "";
+  background: var(--color);
+  z-index: 10;
+  border-radius: 50%;
+  width: 1.5px;
+  height: 1.5px;
+  position: absolute;
+}
+
+.paco-clock-second {
+  --height: 8px;
+  --width: 0.5px;
+  transform: rotate(calc(var(--seconds-deg) * 1deg));
+}
+
+.paco-clock-minute {
+  --height: 7px;
+  transform: rotate(calc(var(--minutes-deg) * 1deg));
+}
+
+.paco-clock-hour {
+  --height: 5px;
+  transform: rotate(calc(var(--hours-deg) * 1deg));
 }
