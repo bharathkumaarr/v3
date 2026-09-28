@@ -18,14 +18,14 @@
   },
   {
     "company": "vipernetwork",
-    "role": "founding engineer",
+    "role": "founding engineer intern",
     "href": "https://vipernet.xyz",
-    "period": "2024 — 2025",
-    "startYear": "2024",
+    "period": "feb 2025 — sep 2025",
+    "startYear": "2025",
     "endYear": "2025",
     "industry": "web3 infrastructure",
     "location": "india",
-    "description": "*founding engineer*, digging into the infrastructure layer.",
+    "description": "*founding engineer intern*, digging into the infrastructure layer.",
     "shipped": [
       "*node telemetry*. designed decentralized node communication protocols and telemetry pipelines across distributed clusters.",
       "*network reliability*. hardened consensus and state synchronization routines, reducing peer latency and packet loss under high load.",

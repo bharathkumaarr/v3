@@ -63,7 +63,7 @@ export default function ExperiencePage() {
                   </span>
 
                   {/* Details on the right */}
-                  <div className="sm:ml-[160px]">
+                  <div className="sm:ml-[192px]">
                     <div className="flex items-baseline justify-between gap-4">
                       <div className="flex items-baseline flex-wrap gap-x-2">
                         <a

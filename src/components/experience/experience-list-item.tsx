@@ -10,6 +10,10 @@ type ExperienceListItemProps = {
 };
 
 function formatDateRange(item: ExperienceItem) {
+  if (item.period) {
+    return <>({item.period})</>;
+  }
+
   if (item.present) {
     return (
       <>
