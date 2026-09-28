@@ -54,7 +54,10 @@ export function Footer() {
   const year = now ? now.getFullYear() : 2026;
 
   return (
-    <footer className="w-full border-t border-neutral-3 bg-neutral-1 text-neutral-6 text-[13px]">
+    <footer
+      className="w-full border-t border-neutral-3 bg-neutral-1 text-neutral-6 text-[13px]"
+      style={{ viewTransitionName: "site-footer" }}
+    >
       <div className="mx-auto max-w-[640px] px-6 sm:px-0 py-5 flex flex-col gap-2">
         {/* Row 1: Statement on left, Year and Analog Clock on right */}
         <div className="flex items-center justify-between">

@@ -267,14 +267,16 @@ export function ThemePageCurl({ children }: { children: ReactNode }) {
             <canvas
               ref={canvasRef}
               className="pointer-events-none fixed inset-0 z-20 h-full w-full"
-              aria-hidden
+              style={{ viewTransitionName: "page-curl-canvas" }}
+              data-page-curl="true"
             />
           )}
 
           {webglFailed && (
             <div
               className="pointer-events-none fixed top-0 right-0 z-20 h-24 w-24 overflow-hidden"
-              aria-hidden
+              style={{ viewTransitionName: "page-curl-canvas" }}
+              data-page-curl="true"
             >
               <div
                 className="absolute top-0 right-0 h-full w-full"

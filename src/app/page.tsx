@@ -7,9 +7,13 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col justify-between">
       <main className="mx-auto w-full max-w-[640px] px-6 sm:px-0 pt-28 pb-16">
-        <Hero />
-        <StackColumns />
-        <NowSection />
+        <div style={{ viewTransitionName: "content-above-headings" }}>
+          <Hero />
+        </div>
+        <div style={{ viewTransitionName: "content-below-headings" }}>
+          <StackColumns />
+          <NowSection />
+        </div>
       </main>
       <Footer />
     </div>

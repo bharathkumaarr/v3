@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import { Footer } from "@/components/footer/footer";
 import { writingEntries } from "@/content/site";
 
@@ -15,7 +15,7 @@ export default function WritingPage() {
         {/* 3-column layout matching paco.me/writing (192px sidebar, 640px center, 192px balance) */}
         <div className="lg:grid lg:grid-cols-[192px_640px_192px] lg:gap-x-6">
           {/* Left Column: Sidenote "index" link */}
-          <nav className="mb-8 lg:mb-0 lg:sticky lg:top-28 lg:h-fit">
+          <nav className="mb-8 lg:mb-0 lg:sticky lg:top-28 lg:h-fit" style={{ viewTransitionName: "index-backlink" }}>
             <Link
               href="/"
               className="inline-flex items-center gap-1.5 text-neutral-8 hover:text-neutral-6 hover:transition-colors hover:duration-150"
@@ -42,12 +42,15 @@ export default function WritingPage() {
 
           {/* Center Column: writing Heading and Index Table */}
           <div className="w-full max-w-[640px]">
-            <h1 className="text-[16px] font-medium leading-[28px] text-neutral-8 mb-8">
+            <h1
+              className="w-fit text-[16px] font-medium leading-[28px] text-neutral-8 mb-8"
+              style={{ viewTransitionName: "page-title-writing" }}
+            >
               writing
             </h1>
 
             {/* Table of Articles Grouped by Year */}
-            <div className="space-y-6">
+            <div className="space-y-6" style={{ viewTransitionName: "subpage-content" }}>
               {writingEntries.map((group) => (
                 <div
                   key={group.year}

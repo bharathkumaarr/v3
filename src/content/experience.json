@@ -3,8 +3,8 @@
     "company": "oneassure",
     "role": "fullstack engineer",
     "href": "https://oneassure.in",
-    "period": "2025 — present",
-    "startYear": "2025",
+    "period": "may 2026 — present",
+    "startYear": "2026",
     "present": true,
     "industry": "insurtech",
     "location": "bangalore, india",
@@ -24,7 +24,7 @@
     "startYear": "2025",
     "endYear": "2025",
     "industry": "web3 infrastructure",
-    "location": "india",
+    "location": "remote",
     "description": "*founding engineer intern*, digging into the infrastructure layer.",
     "shipped": [
       "*node telemetry*. designed decentralized node communication protocols and telemetry pipelines across distributed clusters.",
@@ -41,7 +41,7 @@
     "startYear": "2023",
     "present": true,
     "industry": "web3",
-    "location": "india",
+    "location": "remote",
     "description": "*ecosystem builder*. started as a member, now poking around community initiatives and ecosystem projects.",
     "shipped": [
       "*grants & hackathons*. evaluated and mentored 30+ early-stage projects across product architecture and technical execution.",

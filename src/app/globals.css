@@ -157,3 +157,196 @@ a.link-paco:hover,
   --height: 5px;
   transform: rotate(calc(var(--hours-deg) * 1deg));
 }
+
+/* ==========================================================================
+   Liquid Silk View Transitions
+   ========================================================================== */
+
+/* Prevent inert or hidden clones (e.g. theme-reveal layer) from duplicating transition names */
+[inert],
+[inert] *,
+[aria-hidden="true"]:not([data-page-curl]):not([data-page-curl] *),
+[aria-hidden="true"]:not([data-page-curl]) * {
+  view-transition-name: none !important;
+}
+
+/* Root background stays stable without blinking or fading */
+::view-transition-group(root),
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none !important;
+}
+
+/* Page curl stays rock-solid in the corner throughout all transitions */
+::view-transition-group(page-curl-canvas),
+::view-transition-old(page-curl-canvas),
+::view-transition-new(page-curl-canvas) {
+  animation: none !important;
+}
+
+/* Shared-Element Title Glide - buttery position interpolation */
+::view-transition-group(page-title-experience),
+::view-transition-group(page-title-projects),
+::view-transition-group(page-title-writing) {
+  animation-duration: 520ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: clip;
+}
+
+::view-transition-old(page-title-experience),
+::view-transition-old(page-title-projects),
+::view-transition-old(page-title-writing) {
+  animation: 320ms cubic-bezier(0.16, 1, 0.3, 1) both vt-fade-out;
+}
+
+::view-transition-new(page-title-experience),
+::view-transition-new(page-title-projects),
+::view-transition-new(page-title-writing) {
+  animation: 520ms cubic-bezier(0.16, 1, 0.3, 1) both vt-title-new;
+}
+
+/* --------------------------------------------------------------------------
+   Subpage Content (experience/projects/writing detailed list)
+   - When entering subpage (heading clicked): fades in from top to bottom
+   - When leaving subpage (index clicked): fades out smoothly
+   -------------------------------------------------------------------------- */
+::view-transition-group(subpage-content) {
+  animation-duration: 520ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+::view-transition-old(subpage-content) {
+  animation: 380ms cubic-bezier(0.16, 1, 0.3, 1) both vt-fade-out;
+}
+
+::view-transition-new(subpage-content) {
+  animation: 520ms cubic-bezier(0.16, 1, 0.3, 1) both vt-fade-in-from-top;
+}
+
+/* Index Backlink navigation */
+::view-transition-group(index-backlink) {
+  animation-duration: 520ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+::view-transition-old(index-backlink) {
+  animation: 320ms cubic-bezier(0.16, 1, 0.3, 1) both vt-fade-out;
+}
+
+::view-transition-new(index-backlink) {
+  animation: 520ms cubic-bezier(0.16, 1, 0.3, 1) both vt-fade-in-from-top;
+}
+
+/* --------------------------------------------------------------------------
+   Homepage Contents
+   - content-above-headings (Hero): appears slowly from inside on return
+   - content-below-headings (StackColumns + NowSection): fades in from bottom to top on return
+   -------------------------------------------------------------------------- */
+::view-transition-group(content-above-headings) {
+  animation-duration: 520ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+::view-transition-old(content-above-headings) {
+  animation: 380ms cubic-bezier(0.16, 1, 0.3, 1) both vt-fade-out;
+}
+
+::view-transition-new(content-above-headings) {
+  animation: 520ms cubic-bezier(0.16, 1, 0.3, 1) both vt-appear-from-inside;
+}
+
+::view-transition-group(content-below-headings) {
+  animation-duration: 520ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+::view-transition-old(content-below-headings) {
+  animation: 380ms cubic-bezier(0.16, 1, 0.3, 1) both vt-fade-out;
+}
+
+::view-transition-new(content-below-headings) {
+  animation: 520ms cubic-bezier(0.16, 1, 0.3, 1) both vt-fade-in-from-bottom;
+}
+
+/* Footer Crossfade */
+::view-transition-group(site-footer) {
+  animation: none !important;
+}
+
+::view-transition-old(site-footer) {
+  animation: 320ms cubic-bezier(0.16, 1, 0.3, 1) both vt-fade-out;
+}
+
+::view-transition-new(site-footer) {
+  animation: 520ms cubic-bezier(0.16, 1, 0.3, 1) both vt-fade-in;
+}
+
+/* --------------------------------------------------------------------------
+   Animation Keyframes
+   -------------------------------------------------------------------------- */
+
+@keyframes vt-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes vt-title-new {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Fade in from top to bottom (subtle 14px drift) */
+@keyframes vt-fade-in-from-top {
+  from {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Content above heading appears slowly from inside (subtle scale & micro-lift) */
+@keyframes vt-appear-from-inside {
+  from {
+    opacity: 0;
+    transform: scale(0.98) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Content below heading fades in from bottom to top (subtle 14px drift) */
+@keyframes vt-fade-in-from-bottom {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+

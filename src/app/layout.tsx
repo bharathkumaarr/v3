@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { SmoothScroll } from "@/components/providers/smooth-scroll";
 import { ThemePageCurl } from "@/components/theme-page-curl/theme-page-curl";
+import { ViewTransitions } from "next-view-transitions";
 import "./globals.css";
 
 /** Same faces paco.me ships: Söhne for body, Inter for headings/UI, Newsreader for editorial italics */
@@ -43,18 +44,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${sohne.variable} ${inter.variable} ${newsreader.variable} dark h-full antialiased`}
-      suppressHydrationWarning
-    >
-      <body className="min-h-full bg-neutral-1 font-sans text-neutral-8">
-        <ThemeProvider>
-          <SmoothScroll>
-            <ThemePageCurl>{children}</ThemePageCurl>
-          </SmoothScroll>
-        </ThemeProvider>
-      </body>
-    </html>
+    <ViewTransitions>
+      <html
+        lang="en"
+        className={`${sohne.variable} ${inter.variable} ${newsreader.variable} dark h-full antialiased`}
+        suppressHydrationWarning
+      >
+        <body className="min-h-full bg-neutral-1 font-sans text-neutral-8">
+          <ThemeProvider>
+            <SmoothScroll>
+              <ThemePageCurl>{children}</ThemePageCurl>
+            </SmoothScroll>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ViewTransitions>
   );
 }

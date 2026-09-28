@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import { Footer } from "@/components/footer/footer";
 import { FormattedText } from "@/components/ui/formatted-text";
 import { experience } from "@/content/site";
@@ -16,7 +16,7 @@ export default function ExperiencePage() {
         {/* 3-column layout matching paco.me/writing (192px sidebar, 640px center, 192px balance) */}
         <div className="lg:grid lg:grid-cols-[192px_640px_192px] lg:gap-x-6">
           {/* Left Column: Sidenote "index" link */}
-          <nav className="mb-8 lg:mb-0 lg:sticky lg:top-28 lg:h-fit">
+          <nav className="mb-8 lg:mb-0 lg:sticky lg:top-28 lg:h-fit" style={{ viewTransitionName: "index-backlink" }}>
             <Link
               href="/"
               className="inline-flex items-center gap-1.5 text-neutral-8 hover:text-neutral-6 hover:transition-colors hover:duration-150"
@@ -43,12 +43,15 @@ export default function ExperiencePage() {
 
           {/* Center Column: experience Heading and Detailed List */}
           <div className="w-full max-w-[640px]">
-            <h1 className="text-[16px] font-medium leading-[28px] text-neutral-8 mb-8">
+            <h1
+              className="w-fit text-[16px] font-medium leading-[28px] text-neutral-8 mb-8"
+              style={{ viewTransitionName: "page-title-experience" }}
+            >
               experience
             </h1>
 
             {/* List of Experiences */}
-            <div className="space-y-12">
+            <div className="space-y-12" style={{ viewTransitionName: "subpage-content" }}>
               {experience.map((item) => (
                 <div
                   key={item.company}

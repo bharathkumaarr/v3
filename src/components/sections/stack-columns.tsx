@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import {
   experience,
   projects,
@@ -25,7 +25,9 @@ function ColumnHeader({ href, title, badge }: ColumnHeaderProps) {
           <span className="inline-block transition-all duration-150 ease-out group-hover:opacity-0 group-hover:translate-x-1.5 text-neutral-5">
             /
           </span>
-          <span>{title}</span>
+          <span style={{ viewTransitionName: `page-title-${title}` }}>
+            {title}
+          </span>
         </span>
         {badge && (
           <span className="ml-2 text-[11px] leading-tight text-neutral-6 font-mono border border-neutral-4/60 dark:border-neutral-4 px-1.5 py-0.5 rounded select-none whitespace-nowrap group-hover:text-neutral-8 group-hover:border-neutral-5 transition-colors duration-150">
