@@ -37,7 +37,7 @@
         "date": "18/11",
         "href": "https://convo-sigma.vercel.app/",
         "icon": "/icons/convo.svg",
-        "featured": true
+        "featured": false
       },
       {
         "title": "ditto",
