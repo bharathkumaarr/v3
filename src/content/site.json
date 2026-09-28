@@ -1,0 +1,34 @@
+{
+  "name": "bharath kumar",
+  "title": "bharath / bharath kumar",
+  "description": "software engineer hanging out at the intersection of design and development",
+  "intro": {
+    "leadItalic": "crafting software.",
+    "bio": "hanging out at the intersection of design and development. happily bouncing around the stack: backend, infra, and frontend.",
+    "current": "currently working fullstack at oneassure building the core saas platform."
+  },
+  "now": {
+    "paragraph1": "developing skill through doing, guiltlessly exploring passion and systems engineering, imbuing quality. mindful that *everything around me is someone’s life work.*",
+    "paragraph2": "all i want to do is build software. systems design, infrastructure, web performance, elegant interfaces. the web is an endless medium of opportunity and creativity."
+  },
+  "contact": [
+    {
+      "label": "github",
+      "href": "https://github.com/bharathkumaarr",
+      "handle": "@bharathkumaarr",
+      "description": "code, experiments, and open-source systems."
+    },
+    {
+      "label": "linkedin",
+      "href": "https://linkedin.com/in/bkrm",
+      "handle": "bkrm",
+      "description": "professional background and network."
+    },
+    {
+      "label": "cal.com",
+      "href": "https://cal.com/bharath-kumar-reddy/quick-chat",
+      "handle": "quick-chat",
+      "description": "schedule a chat or brainstorm session."
+    }
+  ]
+}

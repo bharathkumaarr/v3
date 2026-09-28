@@ -1,0 +1,83 @@
+[
+  {
+    "year": "2026",
+    "projects": [
+      {
+        "title": "shipyard",
+        "description": "*automated deployment platform*. coordinates and reliably recovers application deployments across environments. durable execution and idempotent operations reduced recovery time by 68%.",
+        "date": "24/09",
+        "href": "https://github.com/bharathkumaarr",
+        "icon": "/icons/shipyard.svg",
+        "featured": true
+      },
+      {
+        "title": "tracerag",
+        "description": "*grounded document intelligence*. turns complex pdfs into structured, verifiable insights. combines hybrid search, llm extraction, and deterministic citation verification to ensure ai claims trace back to source.",
+        "date": "15/06",
+        "href": "https://github.com/bharathkumaarr",
+        "icon": "/icons/tracerag.svg",
+        "featured": true
+      },
+      {
+        "title": "agentic-eval",
+        "description": "*benchmarking suite for autonomous coding agents*. deterministic state verification and sandbox isolation for multi-turn evaluations.",
+        "date": "12/03",
+        "href": "https://github.com/bharathkumaarr",
+        "featured": false
+      }
+    ]
+  },
+  {
+    "year": "2025",
+    "projects": [
+      {
+        "title": "convo",
+        "description": "*conversational ai platform*. multi-tenant architecture enabling users to configure custom prompt-driven agents with persistent, multi-turn chat sessions.",
+        "date": "18/11",
+        "href": "https://convo-sigma.vercel.app/",
+        "icon": "/icons/convo.svg",
+        "featured": true
+      },
+      {
+        "title": "winden ui",
+        "description": "*internal design system with 50+ accessible components*. built with react, vanilla-extract tokens, and headless accessibility primitives.",
+        "date": "22/07",
+        "href": "https://vite-and-design-system-ui-docs.vercel.app/",
+        "featured": false
+      },
+      {
+        "title": "cache-mesh",
+        "description": "*distributed in-memory cache proxy*. consistency-aware caching with raft consensus and sub-millisecond edge invalidation.",
+        "date": "04/02",
+        "href": "https://github.com/bharathkumaarr",
+        "featured": false
+      }
+    ]
+  },
+  {
+    "year": "2024",
+    "projects": [
+      {
+        "title": "inploi sdk",
+        "description": "*official developer kit for inploi*. 8 packages with core utilities plus drop-in chatbots, job search, and job alert modules.",
+        "date": "14/10",
+        "href": "https://www.npmjs.com/package/@inploi/sdk",
+        "featured": false
+      },
+      {
+        "title": "inploi dashboard",
+        "description": "*customer-facing analytics dashboard*. built with remix and bff patterns connecting to core platform apis.",
+        "date": "08/06",
+        "href": "https://github.com/bharathkumaarr",
+        "featured": false
+      },
+      {
+        "title": "paper-curl",
+        "description": "*webgl physics simulation of turning paper*. custom triangle deformation mesh, lighting shaders, and momentum drag interactions.",
+        "date": "19/01",
+        "href": "https://github.com/bharathkumaarr",
+        "featured": false
+      }
+    ]
+  }
+]

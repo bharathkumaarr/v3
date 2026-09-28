@@ -1,0 +1,32 @@
+[
+  {
+    "company": "oneassure",
+    "href": "https://oneassure.in",
+    "startYear": "2025",
+    "present": true,
+    "industry": "insurtech",
+    "location": "india",
+    "description": "*building across the stack*. working fullstack across backend and frontend on the core saas b2b2c platform.",
+    "icon": "/icons/oneassure.svg"
+  },
+  {
+    "company": "vipernetwork",
+    "href": "https://vipernet.xyz",
+    "startYear": "2024",
+    "endYear": "2025",
+    "industry": "web3 infrastructure",
+    "location": "india",
+    "description": "*founding engineer*, digging into the infrastructure layer.",
+    "icon": "/icons/vipernetwork.svg"
+  },
+  {
+    "company": "superteam",
+    "href": "https://superteam.fun",
+    "startYear": "2023",
+    "present": true,
+    "industry": "web3",
+    "location": "india",
+    "description": "*ecosystem builder*. started as a member, now poking around community initiatives and ecosystem projects.",
+    "icon": "/icons/superteam.svg"
+  }
+]

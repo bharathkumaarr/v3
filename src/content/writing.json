@@ -1,0 +1,52 @@
+[
+  {
+    "year": "2026",
+    "posts": [
+      {
+        "title": "building resilient background workflows",
+        "date": "28/09",
+        "href": "#"
+      },
+      {
+        "title": "idempotent deployment orchestration in practice",
+        "date": "14/04",
+        "href": "#"
+      }
+    ]
+  },
+  {
+    "year": "2025",
+    "posts": [
+      {
+        "title": "state machines and distributed consensus",
+        "date": "12/11",
+        "href": "#"
+      },
+      {
+        "title": "deterministic verification in llm pipelines",
+        "date": "27/08",
+        "href": "#"
+      },
+      {
+        "title": "subtle micro-interactions in web design",
+        "date": "19/03",
+        "href": "#"
+      }
+    ]
+  },
+  {
+    "year": "2024",
+    "posts": [
+      {
+        "title": "crafting interfaces that feel physical",
+        "date": "24/10",
+        "href": "#"
+      },
+      {
+        "title": "performance considerations in webgl shaders",
+        "date": "16/05",
+        "href": "#"
+      }
+    ]
+  }
+]
