@@ -35,6 +35,11 @@ function ColumnHeader({ href, title, badge }: ColumnHeaderProps) {
   );
 }
 
+function getItalicSummary(text: string): string {
+  const match = text.match(/\*([^*]+)\*/);
+  return match ? `*${match[1]}*` : text;
+}
+
 export function StackColumns() {
   const remainingProjects = allProjects.length - projects.length;
   const remainingWriting = allWritingPosts.length - featuredWriting.length;
@@ -108,7 +113,7 @@ export function StackColumns() {
                 )}
               </div>
               <p className="text-[14px] leading-[20px] text-neutral-6 mt-1 text-justify [text-align-last:left]">
-                <FormattedText>{item.description}</FormattedText>
+                <FormattedText>{getItalicSummary(item.description)}</FormattedText>
               </p>
             </div>
           ))}
