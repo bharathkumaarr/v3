@@ -143,7 +143,7 @@ export function StackColumns() {
         <ColumnHeader href="/writing" title="writing" />
         <div className="space-y-6">
           {featuredWriting.map((item) => (
-            <div key={item.title} className="min-h-[84px] text-justify">
+            <div key={item.title} className="min-h-[84px]">
               <div className="flex items-center">
                 <a
                   href={item.href || "#"}
@@ -153,7 +153,7 @@ export function StackColumns() {
                 </a>
               </div>
               {item.description ? (
-                <p className="text-[14px] leading-[20px] text-neutral-6 mt-1 text-justify [text-align-last:left]">
+                <p className="text-[14px] leading-[20px] text-neutral-6 mt-1">
                   <FormattedText>{item.description}</FormattedText>
                 </p>
               ) : (
