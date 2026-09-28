@@ -207,7 +207,7 @@ a.link-paco:hover,
 
 /* --------------------------------------------------------------------------
    Subpage Content (experience/projects/writing detailed list)
-   - When entering subpage (heading clicked): fades in from top to bottom
+   - When entering subpage (heading clicked): silky crossfade in
    - When leaving subpage (index clicked): fades out smoothly
    -------------------------------------------------------------------------- */
 ::view-transition-group(subpage-content) {
@@ -220,7 +220,7 @@ a.link-paco:hover,
 }
 
 ::view-transition-new(subpage-content) {
-  animation: 750ms cubic-bezier(0.2, 1, 0.3, 1) both vt-fade-in-from-top;
+  animation: 750ms cubic-bezier(0.2, 1, 0.3, 1) both vt-fade-in;
 }
 
 /* Index Backlink navigation */
@@ -234,13 +234,14 @@ a.link-paco:hover,
 }
 
 ::view-transition-new(index-backlink) {
-  animation: 750ms cubic-bezier(0.2, 1, 0.3, 1) both vt-fade-in-from-top;
+  animation: 750ms cubic-bezier(0.2, 1, 0.3, 1) both vt-fade-in;
 }
 
 /* --------------------------------------------------------------------------
    Homepage Contents
-   - content-above-headings (Hero): appears slowly from inside on return
-   - content-below-headings (StackColumns + NowSection): fades in from bottom to top on return
+   - content-above-headings (Hero): smooth opacity fade
+   - content-below-headings (StackColumns + NowSection): smooth opacity fade
+   - Pure opacity fades prevent subpixel transform jitter on 1px underlines
    -------------------------------------------------------------------------- */
 ::view-transition-group(content-above-headings) {
   animation-duration: 750ms;
@@ -252,7 +253,7 @@ a.link-paco:hover,
 }
 
 ::view-transition-new(content-above-headings) {
-  animation: 750ms cubic-bezier(0.2, 1, 0.3, 1) both vt-appear-from-inside;
+  animation: 750ms cubic-bezier(0.2, 1, 0.3, 1) both vt-fade-in;
 }
 
 ::view-transition-group(content-below-headings) {
@@ -265,7 +266,7 @@ a.link-paco:hover,
 }
 
 ::view-transition-new(content-below-headings) {
-  animation: 750ms cubic-bezier(0.2, 1, 0.3, 1) both vt-fade-in-from-bottom;
+  animation: 750ms cubic-bezier(0.2, 1, 0.3, 1) both vt-fade-in;
 }
 
 /* Footer Crossfade */
@@ -291,6 +292,12 @@ a.link-paco:hover,
   }
 }
 
+/* Prevent underline stuttering across glyph descenders */
+.underline,
+[class*="underline"] {
+  text-decoration-skip-ink: none;
+}
+
 /* --------------------------------------------------------------------------
    Animation Keyframes
    -------------------------------------------------------------------------- */
@@ -308,7 +315,7 @@ a.link-paco:hover,
   0% {
     opacity: 0;
   }
-  25% {
+  20% {
     opacity: 0;
   }
   100% {
@@ -325,54 +332,6 @@ a.link-paco:hover,
   }
   100% {
     opacity: 1;
-  }
-}
-
-/* Fade in from top to bottom (subtle 14px drift) */
-@keyframes vt-fade-in-from-top {
-  0% {
-    opacity: 0;
-    transform: translateY(-14px);
-  }
-  25% {
-    opacity: 0;
-    transform: translateY(-12px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Content above heading appears slowly from inside (subtle scale & micro-lift) */
-@keyframes vt-appear-from-inside {
-  0% {
-    opacity: 0;
-    transform: scale(0.98) translateY(-4px);
-  }
-  25% {
-    opacity: 0;
-    transform: scale(0.985) translateY(-3px);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-/* Content below heading fades in from bottom to top (subtle 14px drift) */
-@keyframes vt-fade-in-from-bottom {
-  0% {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  25% {
-    opacity: 0;
-    transform: translateY(11px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
   }
 }
 
