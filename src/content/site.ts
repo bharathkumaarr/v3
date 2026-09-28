@@ -54,7 +54,7 @@ export const projects: ProjectItem[] = projectsData.flatMap((group) =>
     .filter((p) => p.featured ?? true)
     .map((p) => ({
       ...p,
-      icon: p.icon || "/icons/shipyard.svg",
+      icon: ("icon" in p && typeof p.icon === "string" ? p.icon : "") || "/icons/shipyard.svg",
     }))
 );
 
