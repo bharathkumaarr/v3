@@ -154,7 +154,7 @@ export function StackColumns() {
               </div>
               {item.description ? (
                 <p className="text-[14px] leading-[20px] text-neutral-6 mt-1">
-                  <FormattedText>{item.description}</FormattedText>
+                  <FormattedText>{getItalicSummary(item.description)}</FormattedText>
                 </p>
               ) : (
                 <span className="text-[13px] leading-[20px] text-neutral-6 tabular-nums font-mono block mt-1">
