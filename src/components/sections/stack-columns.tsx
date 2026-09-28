@@ -50,7 +50,7 @@ export function StackColumns() {
         <div className="space-y-6">
           {projects.map((item) => (
             <div key={item.title} className="min-h-[84px] text-justify">
-              <div className="flex items-center">
+              <div className="flex items-center flex-wrap gap-x-2">
                 {item.href ? (
                   <a
                     href={item.href}
@@ -68,6 +68,11 @@ export function StackColumns() {
                 ) : (
                   <span className="text-[16px] leading-[24px] text-neutral-8">
                     {item.title}
+                  </span>
+                )}
+                {item.completed === false && (
+                  <span className="text-[11px] leading-tight text-neutral-6 font-mono border border-neutral-4/60 dark:border-neutral-4 px-1.5 py-0.5 rounded select-none">
+                    ongoing
                   </span>
                 )}
               </div>

@@ -64,21 +64,28 @@ export default function ProjectsPage() {
                     {group.projects.map((project) => (
                       <div key={project.title} className="py-3 first:pt-0 last:pb-0">
                         <div className="flex items-baseline justify-between gap-4">
-                          <a
-                            href={project.href || "#"}
-                            target={project.href?.startsWith("http") ? "_blank" : undefined}
-                            rel={project.href?.startsWith("http") ? "noopener noreferrer" : undefined}
-                            className="group inline-flex items-center text-[16px] leading-[26px] text-neutral-8"
-                          >
-                            <span className="underline decoration-1 underline-offset-[3px] decoration-neutral-4 group-hover:decoration-neutral-8 group-hover:transition-[text-decoration-color] group-hover:duration-150">
-                              {project.title}
-                            </span>
-                            {project.href?.startsWith("http") && (
-                              <span className="text-[13px] text-neutral-6 ml-1 select-none no-underline inline-block group-hover:transition-transform group-hover:duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-                                ↗
+                          <div className="flex items-center flex-wrap gap-x-2">
+                            <a
+                              href={project.href || "#"}
+                              target={project.href?.startsWith("http") ? "_blank" : undefined}
+                              rel={project.href?.startsWith("http") ? "noopener noreferrer" : undefined}
+                              className="group inline-flex items-center text-[16px] leading-[26px] text-neutral-8"
+                            >
+                              <span className="underline decoration-1 underline-offset-[3px] decoration-neutral-4 group-hover:decoration-neutral-8 group-hover:transition-[text-decoration-color] group-hover:duration-150">
+                                {project.title}
+                              </span>
+                              {project.href?.startsWith("http") && (
+                                <span className="text-[13px] text-neutral-6 ml-1 select-none no-underline inline-block group-hover:transition-transform group-hover:duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                                  ↗
+                                </span>
+                              )}
+                            </a>
+                            {project.completed === false && (
+                              <span className="text-[11px] leading-tight text-neutral-6 font-mono border border-neutral-4/60 dark:border-neutral-4 px-1.5 py-0.5 rounded select-none">
+                                ongoing
                               </span>
                             )}
-                          </a>
+                          </div>
                           <span className="text-[14px] text-neutral-6 tabular-nums font-mono shrink-0">
                             {project.date}
                           </span>

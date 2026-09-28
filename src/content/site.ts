@@ -24,6 +24,7 @@ export type ProjectItem = {
   href?: string;
   icon: string;
   featured?: boolean;
+  completed?: boolean;
 };
 
 export type ProjectGroup = {

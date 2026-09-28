@@ -8,7 +8,8 @@
         "date": "24/09",
         "href": "https://github.com/bharathkumaarr",
         "icon": "/icons/shipyard.svg",
-        "featured": true
+        "featured": true,
+        "completed": false
       },
       {
         "title": "trackmail",
@@ -16,7 +17,8 @@
         "date": "08/08",
         "href": "https://trackmail-six.vercel.app/",
         "icon": "/icons/shipyard.svg",
-        "featured": true
+        "featured": true,
+        "completed": false
       },
       {
         "title": "tracerag",
@@ -24,7 +26,8 @@
         "date": "15/06",
         "href": "https://github.com/bharathkumaarr",
         "icon": "/icons/tracerag.svg",
-        "featured": true
+        "featured": true,
+        "completed": true
       }
     ]
   },
@@ -37,28 +40,32 @@
         "date": "18/11",
         "href": "https://convo-sigma.vercel.app/",
         "icon": "/icons/convo.svg",
-        "featured": false
+        "featured": false,
+        "completed": true
       },
       {
         "title": "ditto",
         "description": "*dynamic intent-driven interface generator*. transforms natural language prompts into live, interactive user interfaces and tailored components on the fly.",
         "date": "28/08",
         "href": "https://ditto-theta.vercel.app/",
-        "featured": false
+        "featured": false,
+        "completed": true
       },
       {
         "title": "texty",
         "description": "*ephemeral instant chat rooms*. generate a unique room code, share it, and chat with zero sign-ups; rooms automatically vanish when everyone leaves.",
         "date": "14/05",
         "href": "https://usetexty.vercel.app/",
-        "featured": false
+        "featured": false,
+        "completed": true
       },
       {
         "title": "polymarket-bot",
         "description": "*unusual bet alert bot for polymarket*. monitors prediction market trades and flags high-conviction or anomalous bets from low-activity wallets via telegram alerts.",
         "date": "19/02",
         "href": "https://github.com/bharathkumaarr/polymarketBot",
-        "featured": false
+        "featured": false,
+        "completed": true
       }
     ]
   },
@@ -70,7 +77,8 @@
         "description": "*webgl physics simulation of turning paper*. custom triangle deformation mesh, lighting shaders, and momentum drag interactions.",
         "date": "19/01",
         "href": "https://bharathkumar.me",
-        "featured": false
+        "featured": false,
+        "completed": true
       }
     ]
   }
