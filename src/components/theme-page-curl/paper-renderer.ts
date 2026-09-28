@@ -141,8 +141,8 @@ function buildSheetGeometry(segments: number, bias: number): BufferGeometry {
   return geometry;
 }
 
-const LIGHT_FALLBACK: [number, number, number] = [1, 1, 1];
-const DARK_FALLBACK: [number, number, number] = [0.047, 0.059, 0.071];
+const LIGHT_FALLBACK: [number, number, number] = [0.949, 0.949, 0.949];
+const DARK_FALLBACK: [number, number, number] = [0.102, 0.102, 0.102];
 
 /**
  * Imperative three.js wrapper.
@@ -238,7 +238,7 @@ export class PaperRenderer {
         uContactFade: { value: shadow.contactFade },
         uProgress: { value: 0 },
         uBackColor: { value: new Vector3(...DARK_FALLBACK) },
-        uShadowColor: { value: new Vector3(0.04, 0.06, 0.08) },
+        uShadowColor: { value: new Vector3(0, 0, 0) },
       },
     });
 
@@ -303,6 +303,9 @@ export class PaperRenderer {
     (uniforms.uFrontColor.value as Vector3).set(...frontRgb);
     (uniforms.uBackColor.value as Vector3).set(...backRgb);
     (shadow.uBackColor.value as Vector3).set(...backRgb);
+
+    (shadow.uShadowColor.value as Vector3).set(0, 0, 0);
+    shadow.uStrength.value = 0;
   }
 
   draw(frame: PaperFrame): void {
@@ -321,7 +324,7 @@ export class PaperRenderer {
 
     paper.uCrease.value = frame.creaseDistance;
     paper.uRadius.value = frame.radius;
-    paper.uReverseBlend.value = Math.min(1, Math.max(0, 0.35 + frame.progress * 1.8));
+    paper.uReverseBlend.value = Math.min(1, Math.max(0, 0.48 + frame.progress * 1.6));
 
     shadow.uCrease.value = frame.creaseDistance;
     shadow.uRadius.value = frame.radius;

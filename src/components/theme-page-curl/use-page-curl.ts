@@ -73,10 +73,11 @@ export function usePageCurl({
   const phaseRef = useRef<CurlPhase>("idle");
 
   // Fold distance and fold direction, each integrated as a damped spring.
-  const distance = useRef(makeSpring(0));
+  const initialCurl = pageCurlConfig.affordance.idleCurl;
+  const distance = useRef(makeSpring(initialCurl));
   const angle = useRef(makeSpring(Math.PI * 0.75));
 
-  const distanceTarget = useRef(0);
+  const distanceTarget = useRef<number>(initialCurl);
   const angleTarget = useRef(Math.PI * 0.75);
   const activeSpring = useRef<SpringParams>(pageCurlConfig.returnSpring);
 

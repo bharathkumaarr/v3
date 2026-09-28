@@ -66,9 +66,7 @@ function revealReach() {
  * dark page with a light reveal and look inverted when nothing is wrong.
  */
 async function resetToLight(page) {
-  // Clearing the key rather than writing "light" into it, so the reload lands on exactly
-  // the same state as a first-ever visit, which the provider resolves to light.
-  await page.evaluate(() => localStorage.removeItem("theme"));
+  await page.evaluate(() => localStorage.setItem("theme", "light"));
   await page.reload({ waitUntil: "networkidle0" });
   await wait(900);
   return page.evaluate(probe);

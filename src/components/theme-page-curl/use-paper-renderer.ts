@@ -13,6 +13,8 @@ type Options = {
   enabled: boolean;
   /** Called if the context is lost or never came up, so the caller can fall back. */
   onUnavailable: () => void;
+  /** Called as soon as the renderer instance is ready. */
+  onReady?: (renderer: PaperRenderer) => void;
 };
 
 /** Fewer segments on phones and low-core machines; the curl is smaller there anyway. */
@@ -37,6 +39,7 @@ export function usePaperRenderer({
   viewport,
   enabled,
   onUnavailable,
+  onReady,
 }: Options) {
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -51,6 +54,7 @@ export function usePaperRenderer({
     }
 
     rendererRef.current = renderer;
+    onReady?.(renderer);
 
     const handleContextLost = (event: Event) => {
       // Preventing the default lets the browser attempt a restore, but the sheet is gone
@@ -66,7 +70,7 @@ export function usePaperRenderer({
       rendererRef.current = null;
       renderer.dispose();
     };
-  }, [canvasRef, enabled, onUnavailable, rendererRef]);
+  }, [canvasRef, enabled, onReady, onUnavailable, rendererRef]);
 
   useEffect(() => {
     const renderer = rendererRef.current;

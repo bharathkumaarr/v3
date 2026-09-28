@@ -124,7 +124,12 @@ export const paperFragmentShader = /* glsl */ `
     float facing = abs(dot(normal, view));
     float edge = 1.0 - uEdgeShade * (1.0 - smoothstep(0.0, uEdgeSpread, facing));
 
-    vec3 color = base * shade * occlusion * edge + highlight;
+    // For dark sheets, grazing angles catch a subtle rim/specular highlight so the
+    // cylinder roll and silhouette stand out crisply against the dark page background.
+    float isDark = step(0.5, 1.0 - uFrontColor.r);
+    float rim = pow(1.0 - facing, 2.5) * 0.18 * isDark;
+
+    vec3 color = base * shade * occlusion * edge + highlight + vec3(rim);
 
     gl_FragColor = vec4(color, alpha);
   }
@@ -191,32 +196,7 @@ export const shadowFragmentShader = /* glsl */ `
       }
     }
 
-    float alpha;
-
-    if (arc > 0.0) {
-      // Revealed side. The roll's silhouette sits one radius past the crease, so the
-      // shade is deepest there and falls off toward the sheet's original corner.
-      float spread = min(uSpread + lift * 0.55, uMaxSpread);
-      float falloff = exp(-max(arc - uRadius, 0.0) / max(spread, 1.0));
-
-      // Ease in from the crease. Everything inside this ramp is hidden behind the roll,
-      // so nothing is lost, and it stops the shade bleeding through the roll's feathered
-      // edge as a hairline along the fold.
-      float enter = smoothstep(0.0, max(uRadius * 0.5, 8.0), arc);
-
-      alpha = uStrength * falloff * enter * contact;
-    } else {
-      // Untouched page. The roll overhangs it and drops a soft shadow across, which is
-      // what seats the fold on the page. Ramped in over a few pixels so it meets the
-      // revealed side at zero and the crease itself stays seamless.
-      float past = -arc;
-      float reach = min(uSpillReach + lift * 0.16, uMaxSpillReach);
-      alpha =
-        uStrength * uSpill * contact *
-        smoothstep(0.0, uSpillOnset, past) * exp(-past / max(reach, 1.0));
-    }
-
-    if (alpha <= 0.003) discard;
-    gl_FragColor = vec4(uShadowColor, alpha);
+    // Shadow completely removed for both light and dark themes as requested
+    discard;
   }
 `;

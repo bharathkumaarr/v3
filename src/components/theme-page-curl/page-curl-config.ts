@@ -95,8 +95,8 @@ export const pageCurlConfig = {
   hoverSpring: { stiffness: 260, damping: 30 },
 
   shadow: {
-    /** Peak opacity of the shadow the roll casts onto the revealed page. */
-    strength: 0.44,
+    /** Peak opacity of the shadow the roll casts onto the revealed page (0 = no shadow). */
+    strength: 0,
     /** Base blur radius, grows with how far the paper has lifted. */
     spread: 16,
     /** Ceiling on that blur, so a big roll softens its shadow without spreading it. */

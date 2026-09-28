@@ -66,7 +66,13 @@ export function ThemePageCurl({ children }: { children: ReactNode }) {
   const mounted = useHydrated();
   const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   const [webglFailed, setWebglFailed] = useState(false);
-  const [revealTheme, setRevealTheme] = useState<ThemeName>("dark");
+  const [revealTheme, setRevealTheme] = useState<ThemeName>(() => {
+    if (typeof document !== "undefined") {
+      return document.documentElement.classList.contains("dark") ? "light" : "dark";
+    }
+    return "light";
+  });
+  const [rendererReady, setRendererReady] = useState(false);
 
   const layerRef = useRef<HTMLDivElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
@@ -78,7 +84,7 @@ export function ThemePageCurl({ children }: { children: ReactNode }) {
   const fallbackBusy = useRef(false);
 
   const theme: ThemeName = resolvedTheme === "dark" ? "dark" : "light";
-  const interactive = mounted && !webglFailed && !reducedMotion;
+  const interactive = mounted && !webglFailed;
 
   /**
    * WebGL is assumed available and disproved on first contact, rather than probed with a
@@ -86,6 +92,7 @@ export function ThemePageCurl({ children }: { children: ReactNode }) {
    * so the fallback takes over before anything has been drawn.
    */
   const handleUnavailable = useCallback(() => setWebglFailed(true), []);
+  const handleReady = useCallback(() => setRendererReady(true), []);
 
   /* ------------------------------------------------------------ frame plumbing */
 
@@ -153,6 +160,7 @@ export function ThemePageCurl({ children }: { children: ReactNode }) {
     viewport,
     enabled: interactive,
     onUnavailable: handleUnavailable,
+    onReady: handleReady,
   });
 
   /** Without the canvas there is no flap to hide the reveal, so it must sit flat. */
@@ -176,7 +184,7 @@ export function ThemePageCurl({ children }: { children: ReactNode }) {
 
     renderer.setThemeColors(front, back);
     wake();
-  }, [rendererRef, resolvedTheme, revealTheme, viewport, wake]);
+  }, [rendererRef, rendererReady, resolvedTheme, revealTheme, viewport, wake]);
 
   /** Keeps the reveal layer opposite the live theme, except mid-turn where it is frozen. */
   useEffect(() => {
@@ -261,6 +269,22 @@ export function ThemePageCurl({ children }: { children: ReactNode }) {
               className="pointer-events-none fixed inset-0 z-20 h-full w-full"
               aria-hidden
             />
+          )}
+
+          {webglFailed && (
+            <div
+              className="pointer-events-none fixed top-0 right-0 z-20 h-24 w-24 overflow-hidden"
+              aria-hidden
+            >
+              <div
+                className="absolute top-0 right-0 h-full w-full"
+                style={{
+                  clipPath: "polygon(0 0, 100% 100%, 100% 0)",
+                  background: theme === "dark" ? "#2a2a2a" : "#e0e0e0",
+                  boxShadow: "none",
+                }}
+              />
+            </div>
           )}
 
           <div
