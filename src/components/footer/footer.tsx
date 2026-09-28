@@ -60,23 +60,23 @@ export function Footer() {
     >
       <div className="mx-auto max-w-[640px] px-6 sm:px-0">
         <div className="border-t border-neutral-3 py-5 flex flex-col gap-2">
-          {/* Row 1: Statement on left, Latest update and Analog Clock on right */}
+          {/* Row 1: Statement on left, Latest deploy date on right */}
           <div className="flex flex-wrap items-center justify-between gap-y-1 gap-x-3">
             <span>&ldquo;harmony demands both order and surrender&rdquo;</span>
+            <span className="font-mono text-[12px] sm:text-[13px] tabular-nums">
+              {`latest: ${deployDate}`}
+            </span>
+          </div>
+
+          {/* Row 2: Location on left, Live UTC & IST times with clock on right */}
+          <div className="flex items-center justify-between text-[12px] sm:text-[13px]">
+            <span>bangalore, india</span>
             <div className="flex items-center gap-2.5">
-              <span className="font-mono text-[12px] sm:text-[13px] tabular-nums">
-                {`latest: ${deployDate}`}
+              <span className="font-mono tabular-nums">
+                {utcTime} utc · {istTime} ist
               </span>
               <AnalogClock date={now} />
             </div>
-          </div>
-
-          {/* Row 2: Location on left, Live IST & UTC times with seconds on right */}
-          <div className="flex items-center justify-between text-[12px] sm:text-[13px]">
-            <span>bangalore, india</span>
-            <span className="font-mono tabular-nums">
-              {istTime} ist · {utcTime} utc
-            </span>
           </div>
         </div>
       </div>
