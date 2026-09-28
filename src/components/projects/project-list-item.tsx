@@ -1,6 +1,7 @@
 import type { ProjectItem } from "@/content/site";
 import { ContentRow } from "@/components/layout/content-row";
 import { ExternalLink, ItemIcon } from "@/components/ui/link-styles";
+import { FormattedText } from "@/components/ui/formatted-text";
 
 type ProjectListItemProps = {
   item: ProjectItem;
@@ -24,7 +25,7 @@ export function ProjectListItem({ item, isLast }: ProjectListItemProps) {
           </h3>
         </header>
         <p className="text-pretty text-sm lowercase text-neutral-6">
-          {item.description}
+          <FormattedText>{item.description}</FormattedText>
         </p>
       </ContentRow>
     </li>

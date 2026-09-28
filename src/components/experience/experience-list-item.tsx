@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ExperienceItem } from "@/content/site";
 import { ContentRow } from "@/components/layout/content-row";
 import { ItemIcon } from "@/components/ui/link-styles";
+import { FormattedText } from "@/components/ui/formatted-text";
 
 type ExperienceListItemProps = {
   item: ExperienceItem;
@@ -58,7 +59,7 @@ export function ExperienceListItem({ item, isLast }: ExperienceListItemProps) {
           {item.industry}, {item.location}
         </p>
         <p className="text-pretty text-sm lowercase text-neutral-6">
-          {item.description}
+          <FormattedText>{item.description}</FormattedText>
         </p>
       </ContentRow>
     </li>
