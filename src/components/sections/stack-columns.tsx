@@ -87,7 +87,7 @@ export function StackColumns() {
         <ColumnHeader href="/projects" title="projects" />
         <div className="space-y-6">
           {projects.map((item) => (
-            <div key={item.title} className="min-h-[84px] text-justify">
+            <div key={item.title} className="min-h-[84px]">
               <div className="flex items-center flex-wrap gap-x-2">
                 {item.href ? (
                   <a
@@ -114,7 +114,7 @@ export function StackColumns() {
                   </span>
                 )}
               </div>
-              <p className="text-[14px] leading-[20px] text-neutral-6 mt-1 text-justify [text-align-last:left]">
+              <p className="text-[14px] leading-[20px] text-neutral-6 mt-1">
                 <FormattedText>{getItalicSummary(item.description)}</FormattedText>
               </p>
             </div>
