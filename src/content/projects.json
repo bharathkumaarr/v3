@@ -18,7 +18,7 @@
         "href": "https://trackmail-six.vercel.app/",
         "icon": "/icons/shipyard.svg",
         "featured": true,
-        "completed": false
+        "completed": true
       },
       {
         "title": "tracerag",
@@ -27,7 +27,7 @@
         "href": "https://github.com/bharathkumaarr",
         "icon": "/icons/tracerag.svg",
         "featured": true,
-        "completed": true
+        "completed": false
       }
     ]
   },
