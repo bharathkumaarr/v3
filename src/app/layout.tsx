@@ -1,34 +1,30 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { SmoothScroll } from "@/components/providers/smooth-scroll";
 import { ThemePageCurl } from "@/components/theme-page-curl/theme-page-curl";
 import "./globals.css";
 
-/** Same face frederic.ooo ships: Innovator Grotesk at 300/400/600/700. */
-const innovatorGrotesk = localFont({
-  src: [
-    {
-      path: "../fonts/InnovatorGrotesk-Light.woff2",
-      weight: "300",
-      style: "normal",
-    },
-    {
-      path: "../fonts/InnovatorGrotesk-Regular.woff2",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../fonts/InnovatorGrotesk-SemiBold.woff2",
-      weight: "600",
-      style: "normal",
-    },
-    {
-      path: "../fonts/InnovatorGrotesk-Bold.woff2",
-      weight: "700",
-      style: "normal",
-    },
-  ],
-  variable: "--font-innovator-grotesk",
+/** Same faces paco.me ships: Söhne for body, Inter for headings/UI, Newsreader for editorial italics */
+const sohne = localFont({
+  src: "../fonts/sohne-subset-0.woff2",
+  weight: "400",
+  style: "normal",
+  variable: "--font-sohne",
+  display: "swap",
+});
+
+const inter = localFont({
+  src: "../fonts/inter-subset.woff2",
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const newsreader = localFont({
+  src: "../fonts/newsreader-subset-0.woff2",
+  weight: "400",
+  style: "italic",
+  variable: "--font-newsreader",
   display: "swap",
 });
 
@@ -49,12 +45,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${innovatorGrotesk.variable} h-full antialiased`}
+      className={`${sohne.variable} ${inter.variable} ${newsreader.variable} dark h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full bg-neutral-1 font-sans text-neutral-8">
         <ThemeProvider>
-          <ThemePageCurl>{children}</ThemePageCurl>
+          <SmoothScroll>
+            <ThemePageCurl>{children}</ThemePageCurl>
+          </SmoothScroll>
         </ThemeProvider>
       </body>
     </html>
