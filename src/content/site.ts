@@ -39,6 +39,8 @@ export type WritingPost = {
   title: string;
   date: string;
   href: string;
+  description?: string;
+  featured?: boolean;
 };
 
 export type WritingGroup = {
@@ -52,14 +54,22 @@ export const experience: ExperienceItem[] = experienceData;
 
 export const projectGroups: ProjectGroup[] = projectsData;
 
-// Flattened featured projects for the homepage column
-export const projects: ProjectItem[] = projectsData.flatMap((group) =>
-  group.projects
-    .filter((p) => p.featured ?? true)
-    .map((p) => ({
-      ...p,
-      icon: ("icon" in p && typeof p.icon === "string" ? p.icon : "") || "/icons/shipyard.svg",
-    }))
+// All projects flattened
+export const allProjects: ProjectItem[] = projectsData.flatMap((group) =>
+  group.projects.map((p) => ({
+    ...p,
+    icon: ("icon" in p && typeof p.icon === "string" ? p.icon : "") || "/icons/shipyard.svg",
+  }))
 );
 
+// Flattened featured projects for the homepage column
+export const projects: ProjectItem[] = allProjects.filter((p) => p.featured ?? true);
+
 export const writingEntries: WritingGroup[] = writingData;
+
+// All writing posts flattened
+export const allWritingPosts: WritingPost[] = writingData.flatMap((group) => group.posts);
+
+// Featured writing posts for the homepage column
+export const featuredWriting: WritingPost[] = allWritingPosts.filter((p) => p.featured ?? false);
+

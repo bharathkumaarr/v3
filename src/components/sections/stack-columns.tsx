@@ -1,5 +1,11 @@
 import Link from "next/link";
-import { experience, projects } from "@/content/site";
+import {
+  experience,
+  projects,
+  allProjects,
+  featuredWriting,
+  allWritingPosts,
+} from "@/content/site";
 import { FormattedText } from "@/components/ui/formatted-text";
 
 type ColumnHeaderProps = {
@@ -30,6 +36,9 @@ function ColumnHeader({ href, title, badge }: ColumnHeaderProps) {
 }
 
 export function StackColumns() {
+  const remainingProjects = allProjects.length - projects.length;
+  const remainingWriting = allWritingPosts.length - featuredWriting.length;
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-14">
       {/* Column 1: experience */}
@@ -103,12 +112,67 @@ export function StackColumns() {
               </p>
             </div>
           ))}
+
+          {remainingProjects > 0 && (
+            <div className="pt-2">
+              <Link
+                href="/projects"
+                className="group inline-flex items-center text-[13px] font-mono text-neutral-6 hover:text-neutral-8 hover:transition-colors hover:duration-150"
+              >
+                <span className="underline decoration-1 underline-offset-[3px] decoration-neutral-4/60 group-hover:decoration-neutral-8 group-hover:transition-[text-decoration-color] group-hover:duration-150">
+                  +{remainingProjects} more
+                </span>
+                <span className="ml-1 text-[11px] select-none no-underline inline-block group-hover:transition-transform group-hover:duration-150 group-hover:translate-x-0.5">
+                  →
+                </span>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Column 3: writing */}
       <div className="w-full sm:w-[192px]">
         <ColumnHeader href="/writing" title="writing" badge="view all" />
+        <div className="space-y-6">
+          {featuredWriting.map((item) => (
+            <div key={item.title} className="min-h-[84px] text-justify">
+              <div className="flex items-center">
+                <a
+                  href={item.href || "#"}
+                  className="text-[16px] leading-[24px] text-neutral-8 underline decoration-1 underline-offset-[3px] decoration-neutral-4 hover:decoration-neutral-8 hover:transition-[text-decoration-color] hover:duration-150"
+                >
+                  {item.title}
+                </a>
+              </div>
+              {item.description ? (
+                <p className="text-[14px] leading-[20px] text-neutral-6 mt-1 text-justify [text-align-last:left]">
+                  <FormattedText>{item.description}</FormattedText>
+                </p>
+              ) : (
+                <span className="text-[13px] leading-[20px] text-neutral-6 tabular-nums font-mono block mt-1">
+                  {item.date}
+                </span>
+              )}
+            </div>
+          ))}
+
+          {remainingWriting > 0 && (
+            <div className="pt-2">
+              <Link
+                href="/writing"
+                className="group inline-flex items-center text-[13px] font-mono text-neutral-6 hover:text-neutral-8 hover:transition-colors hover:duration-150"
+              >
+                <span className="underline decoration-1 underline-offset-[3px] decoration-neutral-4/60 group-hover:decoration-neutral-8 group-hover:transition-[text-decoration-color] group-hover:duration-150">
+                  +{remainingWriting} more
+                </span>
+                <span className="ml-1 text-[11px] select-none no-underline inline-block group-hover:transition-transform group-hover:duration-150 group-hover:translate-x-0.5">
+                  →
+                </span>
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

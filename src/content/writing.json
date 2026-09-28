@@ -4,13 +4,17 @@
     "posts": [
       {
         "title": "building resilient background workflows",
+        "description": "*durable execution in distributed systems*. patterns for retries, idempotency keys, and recovering state across failures.",
         "date": "28/09",
-        "href": "#"
+        "href": "#",
+        "featured": true
       },
       {
         "title": "idempotent deployment orchestration in practice",
+        "description": "*zero-downtime rollouts*. designing deployment state machines that safely converge on desired infrastructure state.",
         "date": "14/04",
-        "href": "#"
+        "href": "#",
+        "featured": true
       }
     ]
   },
@@ -19,18 +23,22 @@
     "posts": [
       {
         "title": "state machines and distributed consensus",
+        "description": "*distributed coordination*. lessons learned implementing consensus algorithms and handling network partitions.",
         "date": "12/11",
-        "href": "#"
+        "href": "#",
+        "featured": true
       },
       {
         "title": "deterministic verification in llm pipelines",
         "date": "27/08",
-        "href": "#"
+        "href": "#",
+        "featured": false
       },
       {
         "title": "subtle micro-interactions in web design",
         "date": "19/03",
-        "href": "#"
+        "href": "#",
+        "featured": false
       }
     ]
   },
@@ -40,13 +48,22 @@
       {
         "title": "crafting interfaces that feel physical",
         "date": "24/10",
-        "href": "#"
+        "href": "#",
+        "featured": false
       },
       {
         "title": "performance considerations in webgl shaders",
         "date": "16/05",
-        "href": "#"
+        "href": "#",
+        "featured": false
+      },
+      {
+        "title": "zero-cost abstractions in systems programming",
+        "date": "11/02",
+        "href": "#",
+        "featured": false
       }
     ]
   }
 ]
+
