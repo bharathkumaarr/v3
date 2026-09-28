@@ -51,7 +51,7 @@ export function Footer() {
       }).format(now)
     : "--:--:--";
 
-  const year = now ? now.getFullYear() : 2026;
+  const deployDate = process.env.NEXT_PUBLIC_DEPLOY_DATE || "29 sep 2026";
 
   return (
     <footer
@@ -59,11 +59,13 @@ export function Footer() {
       style={{ viewTransitionName: "site-footer" }}
     >
       <div className="mx-auto max-w-[640px] px-6 sm:px-0 py-5 flex flex-col gap-2">
-        {/* Row 1: Statement on left, Year and Analog Clock on right */}
-        <div className="flex items-center justify-between">
-          <span>not all those who wander are lost.</span>
+        {/* Row 1: Statement on left, Latest update and Analog Clock on right */}
+        <div className="flex flex-wrap items-center justify-between gap-y-1 gap-x-3">
+          <span>&ldquo;harmony demands both order and surrender&rdquo;</span>
           <div className="flex items-center gap-2.5">
-            <span className="font-mono tabular-nums">{year}</span>
+            <span className="font-mono text-[12px] sm:text-[13px] tabular-nums">
+              {`latest update: ${deployDate}`}
+            </span>
             <AnalogClock date={now} />
           </div>
         </div>
