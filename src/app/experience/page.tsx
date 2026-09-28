@@ -86,7 +86,7 @@ export default function ExperiencePage() {
                         </a>
                         {item.role && (
                           <span className="text-[14px] text-neutral-6">
-                            / {item.role}
+                            {item.role}
                           </span>
                         )}
                       </div>
