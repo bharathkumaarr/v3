@@ -56,9 +56,9 @@ export function Footer() {
   return (
     <footer className="w-full border-t border-neutral-3 bg-neutral-1 text-neutral-6 text-[13px]">
       <div className="mx-auto max-w-[640px] px-6 sm:px-0 py-5 flex flex-col gap-2">
-        {/* Row 1: Statement on left, Year and Analog Clock on right (identical to paco.me) */}
+        {/* Row 1: Statement on left, Year and Analog Clock on right */}
         <div className="flex items-center justify-between">
-          <span>pray at the altar of hard work.</span>
+          <span>not all those who wander are lost.</span>
           <div className="flex items-center gap-2.5">
             <span className="font-mono tabular-nums">{year}</span>
             <AnalogClock date={now} />
