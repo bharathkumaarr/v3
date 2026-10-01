@@ -50,11 +50,12 @@ export default function WritingPage() {
             </h1>
 
             {/* Table of Articles Grouped by Year */}
-            <div className="space-y-6" style={{ viewTransitionName: "subpage-content" }}>
-              {writingEntries.map((group) => (
+            <div className="space-y-6">
+              {writingEntries.map((group, idx) => (
                 <div
                   key={group.year}
                   className="relative border-t border-neutral-3 pt-3"
+                  style={{ viewTransitionName: `subpage-item-${idx}` }}
                 >
                   {/* Year */}
                   <span className="block sm:absolute sm:left-0 sm:top-3 text-[14px] text-neutral-6 tabular-nums font-mono mb-2 sm:mb-0">

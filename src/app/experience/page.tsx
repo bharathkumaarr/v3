@@ -51,11 +51,12 @@ export default function ExperiencePage() {
             </h1>
 
             {/* List of Experiences */}
-            <div className="space-y-12" style={{ viewTransitionName: "subpage-content" }}>
-              {experience.map((item) => (
+            <div className="space-y-12">
+              {experience.map((item, idx) => (
                 <div
                   key={item.company}
                   className="relative border-t border-neutral-3 pt-3"
+                  style={{ viewTransitionName: `subpage-item-${idx}` }}
                 >
                   {/* Period / Timeline on the left */}
                   <span className="block sm:absolute sm:left-0 sm:top-3 text-[14px] text-neutral-6 tabular-nums font-mono mb-2 sm:mb-0">
