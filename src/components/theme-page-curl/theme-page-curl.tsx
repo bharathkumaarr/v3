@@ -298,6 +298,8 @@ export function ThemePageCurl({ children }: { children: ReactNode }) {
               cursor: interactive ? "grab" : "pointer",
             }}
             onClick={handleFallbackPointer}
+            data-page-curl="grab"
+            data-no-click-sound="true"
             aria-hidden
           />
 

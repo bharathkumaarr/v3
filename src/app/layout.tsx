@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { ClickSoundProvider } from "@/components/providers/click-sound-provider";
 import { SmoothScroll } from "@/components/providers/smooth-scroll";
 import { ThemePageCurl } from "@/components/theme-page-curl/theme-page-curl";
 import { ViewTransitions } from "next-view-transitions";
@@ -52,9 +53,11 @@ export default function RootLayout({
       >
         <body className="min-h-full bg-neutral-1 font-sans text-neutral-8">
           <ThemeProvider>
-            <SmoothScroll>
-              <ThemePageCurl>{children}</ThemePageCurl>
-            </SmoothScroll>
+            <ClickSoundProvider>
+              <SmoothScroll>
+                <ThemePageCurl>{children}</ThemePageCurl>
+              </SmoothScroll>
+            </ClickSoundProvider>
           </ThemeProvider>
         </body>
       </html>
