@@ -81,6 +81,14 @@
     "year": "2024",
     "projects": [
       {
+        "title": "3d-ball-scroll",
+        "description": "*scroll-driven 3d canvas animation*. frame-by-frame 3d render sequencing synchronized with viewport scroll using gsap scrolltrigger and html5 canvas.",
+        "date": "08/11",
+        "href": "https://3dballscroll.netlify.app/",
+        "featured": false,
+        "completed": true
+      },
+      {
         "title": "paper-curl",
         "description": "*webgl physics simulation of turning paper*. custom triangle deformation mesh, lighting shaders, and momentum drag interactions.",
         "date": "19/01",
