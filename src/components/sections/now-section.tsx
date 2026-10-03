@@ -38,12 +38,12 @@ export function NowSection() {
         </a>
         , say hello at{" "}
         <a
-          href={xContact?.href || "https://x.com/bharathkumarr"}
+          href={xContact?.href || "https://x.com/bharathkumxr"}
           target="_blank"
           rel="noopener noreferrer"
           className="underline decoration-1 underline-offset-[3px] decoration-neutral-4 hover:decoration-neutral-8 text-neutral-8 hover:transition-[text-decoration-color] hover:duration-150"
         >
-          {xContact?.handle || "@bharathkumarr"}
+          {xContact?.handle || "@bharathkumxr"}
         </a>
         , find me on{" "}
         <a
