@@ -12,22 +12,47 @@
         "completed": false
       },
       {
+        "title": "tracerag",
+        "description": "*grounded document intelligence*. turns complex pdfs into structured, verifiable insights. combines hybrid search, llm extraction, and deterministic citation verification to ensure ai claims trace back to source.",
+        "date": "20/09",
+        "href": "https://github.com/bharathkumaarr",
+        "icon": "/icons/tracerag.svg",
+        "featured": true,
+        "completed": false
+      },
+      {
         "title": "trackmail",
         "description": "*stealth email tracking for gmail*. chrome extension providing real-time open detection, read timestamps, and follow-up alerts directly inside the inbox with zero clutter.",
-        "date": "08/08",
+        "date": "20/08",
         "href": "https://trackmail-six.vercel.app/",
         "icon": "/icons/shipyard.svg",
         "featured": true,
         "completed": true
       },
       {
-        "title": "tracerag",
-        "description": "*grounded document intelligence*. turns complex pdfs into structured, verifiable insights. combines hybrid search, llm extraction, and deterministic citation verification to ensure ai claims trace back to source.",
-        "date": "15/06",
-        "href": "https://github.com/bharathkumaarr",
-        "icon": "/icons/tracerag.svg",
-        "featured": true,
-        "completed": false
+        "title": "ditto",
+        "description": "*dynamic intent-driven interface generator*. transforms natural language prompts into live, interactive user interfaces and tailored components on the fly.",
+        "date": "08/02",
+        "href": "https://ditto-theta.vercel.app/",
+        "featured": false,
+        "completed": true
+      },
+      {
+        "title": "convo",
+        "description": "*conversational ai platform*. multi-tenant architecture enabling users to configure custom prompt-driven agents with persistent, multi-turn chat sessions.",
+        "date": "13/01",
+        "href": "https://convo-sigma.vercel.app/",
+        "icon": "/icons/convo.svg",
+        "featured": false,
+        "completed": true
+      },
+      {
+        "title": "polymarket-bot",
+        "description": "*unusual bet alert bot for polymarket*. monitors prediction market trades and flags high-conviction or anomalous bets from low-activity wallets via telegram alerts.",
+        "date": "04/01",
+        "href": "https://github.com/bharathkumaarr/polymarketBot",
+        "featured": false,
+        "completed": true
       }
     ]
   },
@@ -35,35 +60,18 @@
     "year": "2025",
     "projects": [
       {
-        "title": "convo",
-        "description": "*conversational ai platform*. multi-tenant architecture enabling users to configure custom prompt-driven agents with persistent, multi-turn chat sessions.",
-        "date": "18/11",
-        "href": "https://convo-sigma.vercel.app/",
-        "icon": "/icons/convo.svg",
-        "featured": false,
-        "completed": true
-      },
-      {
-        "title": "ditto",
-        "description": "*dynamic intent-driven interface generator*. transforms natural language prompts into live, interactive user interfaces and tailored components on the fly.",
-        "date": "28/08",
-        "href": "https://ditto-theta.vercel.app/",
-        "featured": false,
-        "completed": true
-      },
-      {
         "title": "texty",
         "description": "*ephemeral instant chat rooms*. generate a unique room code, share it, and chat with zero sign-ups; rooms automatically vanish when everyone leaves.",
-        "date": "14/05",
+        "date": "09/06",
         "href": "https://usetexty.vercel.app/",
         "featured": false,
         "completed": true
       },
       {
-        "title": "polymarket-bot",
-        "description": "*unusual bet alert bot for polymarket*. monitors prediction market trades and flags high-conviction or anomalous bets from low-activity wallets via telegram alerts.",
-        "date": "19/02",
-        "href": "https://github.com/bharathkumaarr/polymarketBot",
+        "title": "chronoLOCK",
+        "description": "*digital time capsule platform*. create and securely store digital time capsules with customizable reveal dates, media attachments, and automated unlock alerts.",
+        "date": "23/05",
+        "href": "https://chrono-lock.vercel.app/",
         "featured": false,
         "completed": true
       }
